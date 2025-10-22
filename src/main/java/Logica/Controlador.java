@@ -1,6 +1,8 @@
 package Logica;
 
 import Persistencia.ConexionMongoDB;
+import Persistencia.UsuarioDB;
+import com.mongodb.MongoException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Controlador implements IControlador{
@@ -16,9 +20,19 @@ public class Controlador implements IControlador{
     public List<Proponente> misProponentes = new ArrayList<>();
     public List<Colaborador> misColaboradores = new ArrayList<>();
     public List<Propuesta> misPropuestas = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(Controlador.class);
     
-    public Controlador() {
+    private final UsuarioDB usuarioDB;
+    
+    public Controlador() throws Exception {
+        ConexionMongoDB mongoDB = new ConexionMongoDB("localhost", 27017, "root", "1234");
+        try{
+            mongoDB.crearConexion();
+        }catch(MongoException e){
+            logger.error("Error: " + e.getMessage());
+        }
         
+        this.usuarioDB = new UsuarioDB(mongoDB);
     }
     
     //ControladoraPersistencia cp = new ControladoraPersistencia();

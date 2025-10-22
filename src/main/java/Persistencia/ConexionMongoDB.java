@@ -1,14 +1,20 @@
 package Persistencia;
 
 import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoException;
 import com.mongodb.client.ListDatabasesIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.BsonInt64;
+import org.bson.codecs.configuration.CodecProvider;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,23 +30,37 @@ public class ConexionMongoDB {
         this.client = null;
     }
     
+    private boolean getPing(MongoDatabase database){
+        try{
+            Bson comando = new BsonDocument("ping", new BsonInt64(1));
+            Document resultado = database.runCommand(comando);
+            
+            logger.info("Resultado ping: " + resultado.toString());
+
+        }catch(MongoException e){
+            logger.error("Error Ping: " + e.getMessage());
+            return false;
+        }
+        
+        return true;
+    }
+    
     public boolean crearConexion() throws MongoException{
         try{
             MongoClient mongoClient = MongoClients.create(this.connectionString);
             
             MongoDatabase database = mongoClient.getDatabase("admin");
-            Bson comando = new BsonDocument("ping", new BsonInt64(1));
-            Document resultado = database.runCommand(comando);
+            if(getPing(database)){
+                this.client = mongoClient;
+                return true;
+            }
             
-            logger.info("Conexion establecida. Ping: " + resultado.toString());
-            
-            this.client = mongoClient;
-            
-            return true;
         }catch(MongoException e){
             logger.error("Error: " + e.getMessage());
             throw e;
         }
+        
+        return false;
     }
     
     public void mostrarInformacionCluster(){
@@ -68,6 +88,28 @@ public class ConexionMongoDB {
             logger.info(String.format("%d-) %s", aux, d.toString()));
             aux++;
         }
+    }
+    
+    public MongoDatabase getDatabaseWithCodec(String databaseName) throws Exception {
+        if(this.client == null){
+            if(!this.crearConexion()){
+                throw new Exception("No se ha podido crear la conexión con el servidor MongoDB.");
+            }
+        }
+        
+        CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+        CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), CodecRegistries.fromProviders(pojoCodecProvider));
+        MongoDatabase database = this.client.getDatabase(databaseName).withCodecRegistry(pojoCodecRegistry);
+        if(!getPing(database)){
+            throw new Exception("No se ha podido acceder a la base de datos.");
+        }
+        
+        return database;
+    }
+    
+    public MongoCollection<?> getCollection(String databaseName, String collectionName, Class entidad) throws Exception{
+        MongoDatabase database = getDatabaseWithCodec(databaseName);
+        return database.getCollection(databaseName, entidad);
     }
     
     public void cerrarConexion(){

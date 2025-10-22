@@ -3,10 +3,12 @@ package Logica;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
 
 //@Entity
 //@PrimaryKeyJoinColumn(name = "nickname")
+@BsonDiscriminator(key = "tipo", value = "Proponente")
 public class Proponente extends Usuario {
 
     

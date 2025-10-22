@@ -4,10 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
 
 //@Entity
 //@PrimaryKeyJoinColumn(name = "nickname")
+@BsonDiscriminator(key = "tipo", value = "Colaborador")
 public class Colaborador extends Usuario {
     
 //    @OneToMany(mappedBy = "miColaborador")

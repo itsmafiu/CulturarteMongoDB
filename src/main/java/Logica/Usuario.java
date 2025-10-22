@@ -4,13 +4,17 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
+import org.bson.codecs.pojo.annotations.BsonId;
 
 //@Entity
 //@Table(name="Usuario")
 //@Inheritance(strategy = InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
+@BsonDiscriminator // puede tener herencias
 public class Usuario implements Serializable {
 //    @Id
+    @BsonId
     String nickname;
 //    @Basic(optional = false)
     String email;
