@@ -2,26 +2,19 @@ package Logica;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 
 
-@Entity
-@Table(name="Aporte")
+//@Entity
+//@Table(name="Aporte")
 public class Aporte implements Serializable {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @ManyToOne
-    @JoinColumn(name = "titulo")
+//    @ManyToOne
+//    @JoinColumn(name = "titulo")
     private Propuesta miPropuesta;
-    @ManyToOne
-    @JoinColumn(name = "nickname")
+//    @ManyToOne
+//    @JoinColumn(name = "nickname")
     private Colaborador miColaborador;
     private double $aporte;
     private LocalDateTime fechaHora;

@@ -3,28 +3,22 @@ package Logica;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="Categoria")
+//@Entity
+//@Table(name="Categoria")
 public class Categoria implements Serializable{
-    @Id
+//    @Id
     private String nombre;
 
-    @ManyToOne
-    @JoinColumn(name = "padre_nombre")
+//    @ManyToOne
+//    @JoinColumn(name = "padre_nombre")
     private Categoria padre; //Necesito agregar esto para poder llenar ArbolCategoria y
     //mantener la Jerarquia entre Categorias sacando las Categorias de la base de Datos
     
-    @OneToMany(mappedBy="padre")
+//    @OneToMany(mappedBy="padre")
     private List<Categoria> hijas = new ArrayList<>();
     
-    @OneToMany(mappedBy = "categoria")
+//    @OneToMany(mappedBy = "categoria")
     private List<Propuesta> misPropuestas = new ArrayList();
 
     public Categoria() {

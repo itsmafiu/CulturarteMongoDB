@@ -4,27 +4,15 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="Usuario")
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
+//@Entity
+//@Table(name="Usuario")
+//@Inheritance(strategy = InheritanceType.JOINED)
+//@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
 public class Usuario implements Serializable {
-    @Id
+//    @Id
     String nickname;
-    @Basic(optional = false)
+//    @Basic(optional = false)
     String email;
     String contraseña;
     String nombre;
@@ -32,11 +20,11 @@ public class Usuario implements Serializable {
     LocalDate fecNac;
     String imagen = "";
     String imagenWeb = "";
-    @OneToMany
-    @JoinTable(name = "UsuarioSeguidos", joinColumns = @JoinColumn(name = "nickSeguidor"), inverseJoinColumns = @JoinColumn(name = "nickSeguido"))
+//    @OneToMany
+//    @JoinTable(name = "UsuarioSeguidos", joinColumns = @JoinColumn(name = "nickSeguidor"), inverseJoinColumns = @JoinColumn(name = "nickSeguido"))
     List<Usuario> misSeguidos = new ArrayList<>();
-    @ManyToMany
-    @JoinTable(name = "Favoritas", joinColumns = @JoinColumn(name = "nick_usuario"), inverseJoinColumns = @JoinColumn(name = "titulo_propuesta"))
+//    @ManyToMany
+//    @JoinTable(name = "Favoritas", joinColumns = @JoinColumn(name = "nick_usuario"), inverseJoinColumns = @JoinColumn(name = "titulo_propuesta"))
     List<Propuesta> misFavoritas = new ArrayList<>();
 
     public Usuario() {

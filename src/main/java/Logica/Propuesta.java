@@ -5,23 +5,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 
-@Entity
-@Table(name="Propuesta")
+
+//@Entity
+//@Table(name="Propuesta")
 public class Propuesta implements Serializable {
-    @Id
+//    @Id
     private String titulo;
-    @Column(name="descripcion",length=1000)
+//    @Column(name="descripcion",length=1000)
     private String descrip;
     private String imagen = "";
     private String lugar;
@@ -32,19 +24,19 @@ public class Propuesta implements Serializable {
     private LocalDate fechaPubli;
     private LocalDateTime fechaLimit;
     private EnumRetorno posibleRetorno;
-    @OneToOne
+//    @OneToOne
     //@JoinColumn(name = "ESTADOACTUAL_NUMERACION")
     private Estado estadoActual;
     //@ManyToOne
-    @OneToMany(mappedBy = "miPropuesta")
+//    @OneToMany(mappedBy = "miPropuesta")
     private List<Aporte> misAportes = new ArrayList<>();
-    @OneToMany//(mappedBy = "propuesta")
-    @JoinTable(name = "ListaEstados", joinColumns = @JoinColumn(name = "tituloPropuesta"), inverseJoinColumns = @JoinColumn(name = "numeracionEstado"))
+//    @OneToMany//(mappedBy = "propuesta")
+//    @JoinTable(name = "ListaEstados", joinColumns = @JoinColumn(name = "tituloPropuesta"), inverseJoinColumns = @JoinColumn(name = "numeracionEstado"))
     public List<Estado> misEstados = new ArrayList<>();//A CAMBIAR
-    @ManyToOne
+//    @ManyToOne
     private Proponente miProponente;
-    @ManyToOne
-    @JoinColumn(name = "nombre_Categoria")
+//    @ManyToOne
+//    @JoinColumn(name = "nombre_Categoria")
     private Categoria categoria;
     
     public Propuesta(){

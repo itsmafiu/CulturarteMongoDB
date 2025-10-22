@@ -2,17 +2,13 @@ package Logica;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name="Estado")
+
+//@Entity
+//@Table(name="Estado")
 public class Estado implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     int numeracion;
     EnumEstado estado;
     LocalDate fecha;
