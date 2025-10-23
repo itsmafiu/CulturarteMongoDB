@@ -2,6 +2,8 @@ package Logica;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
 
 
 //@Entity
@@ -9,7 +11,8 @@ import java.time.LocalDate;
 public class Estado implements Serializable {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-    int numeracion;
+    @BsonId
+    ObjectId numeracion;
     EnumEstado estado;
     LocalDate fecha;
 
@@ -21,11 +24,11 @@ public class Estado implements Serializable {
         this.fecha = fec;
     }
     
-    public int getNumeracion() {
+    public ObjectId getNumeracion() {
         return numeracion;
     }
 
-    public void setNumeracion(int numeracion) {
+    public void setNumeracion(ObjectId numeracion) {
         this.numeracion = numeracion;
     }
     

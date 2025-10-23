@@ -28,32 +28,32 @@ public class Culturarte {
         Fabrica fb = new Fabrica();
         IControlador ic = Fabrica.getInstancia().getIControlador(mongoDB);
 //                
-//        VentanaPrincipal ventana = new VentanaPrincipal(ic);
-//        ventana.setLocationRelativeTo(null);
-//        ventana.setVisible(true);
+        VentanaPrincipal ventana = new VentanaPrincipal(ic);
+        ventana.setLocationRelativeTo(null);
+        ventana.setVisible(true);
         
         ///////////////PRUEBAS////////////////////
-        mongoDB.mostrarInformacionCluster();
-        
-        mongoDB.mostrarBasesDeDatos();
-        
-        MongoCollection<Usuario> usuarios;
-        
-        try{
-            usuarios = (MongoCollection<Usuario>) mongoDB.getCollection("Culturarte", "usuarios", Usuario.class);
-        }catch(Exception e){
-            mongoDB.cerrarConexion();
-            logger.error("No ha sido posible acceder a la colección de usuarios. Finaliza el programa.");
-            logger.error("Error: " + e.getMessage());
-            return;
-        }
-        
-        logger.info("Se ha accedido a la colección Usuarios");
-        
-        usuarios.insertOne(new Colaborador("mafiu", "mafiu@gmail.com", "Matthew", "Freire", LocalDate.now(), "", "1234", ""));
-        
-        mongoDB.mostrarColecciones("Culturarte");
-        
-        mongoDB.cerrarConexion();
+//        mongoDB.mostrarInformacionCluster();
+//        
+//        mongoDB.mostrarBasesDeDatos();
+//        
+//        MongoCollection<Usuario> usuarios;
+//        
+//        try{
+//            usuarios = (MongoCollection<Usuario>) mongoDB.getCollection("Culturarte", "usuarios", Usuario.class);
+//        }catch(Exception e){
+//            mongoDB.cerrarConexion();
+//            logger.error("No ha sido posible acceder a la colección de usuarios. Finaliza el programa.");
+//            logger.error("Error: " + e.getMessage());
+//            return;
+//        }
+//        
+//        logger.info("Se ha accedido a la colección Usuarios");
+//        
+//        //usuarios.insertOne(new Colaborador("mafiu", "mafiu@gmail.com", "Matthew", "Freire", LocalDate.now(), "", "1234", ""));
+//        
+//        mongoDB.mostrarColecciones("Culturarte");
+//        
+//        mongoDB.cerrarConexion();
     }
 }

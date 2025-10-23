@@ -2,6 +2,8 @@ package Logica;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
 
 
 
@@ -9,7 +11,8 @@ import java.time.LocalDateTime;
 //@Table(name="Aporte")
 public class Aporte implements Serializable {
 //    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @BsonId
+    private ObjectId id;
 //    @ManyToOne
 //    @JoinColumn(name = "titulo")
     private Propuesta miPropuesta;
@@ -107,11 +110,11 @@ public class Aporte implements Serializable {
         return null;
     }
 
-    public int getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
     

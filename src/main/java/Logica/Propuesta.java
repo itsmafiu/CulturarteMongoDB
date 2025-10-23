@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonId;
 
 
 
@@ -12,6 +13,7 @@ import java.util.List;
 //@Table(name="Propuesta")
 public class Propuesta implements Serializable {
 //    @Id
+    @BsonId
     private String titulo;
 //    @Column(name="descripcion",length=1000)
     private String descrip;

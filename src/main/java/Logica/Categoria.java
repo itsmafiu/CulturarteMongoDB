@@ -3,16 +3,18 @@ package Logica;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonId;
 
 //@Entity
 //@Table(name="Categoria")
 public class Categoria implements Serializable{
 //    @Id
+    @BsonId
     private String nombre;
 
 //    @ManyToOne
 //    @JoinColumn(name = "padre_nombre")
-    private Categoria padre; //Necesito agregar esto para poder llenar ArbolCategoria y
+    private String padre; //Necesito agregar esto para poder llenar ArbolCategoria y
     //mantener la Jerarquia entre Categorias sacando las Categorias de la base de Datos
     
 //    @OneToMany(mappedBy="padre")
@@ -45,11 +47,11 @@ public class Categoria implements Serializable{
         return hijas;
     }
     
-    public Categoria getPadre() {
+    public String getPadre() {
         return padre;
     }
 
-    public void setPadre(Categoria padre) {
+    public void setPadre(String padre) {
         this.padre = padre;
     }
     public List<Propuesta> getPropuestas(){
@@ -68,6 +70,6 @@ public class Categoria implements Serializable{
     }
     public void agregarHija(Categoria cat){
         hijas.add(cat);
-        cat.setPadre(this);
+        cat.setPadre(this.getNombre());
     }
 }
