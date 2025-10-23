@@ -26,7 +26,7 @@ public class Usuario implements Serializable {
     String imagenWeb = "";
 //    @OneToMany
 //    @JoinTable(name = "UsuarioSeguidos", joinColumns = @JoinColumn(name = "nickSeguidor"), inverseJoinColumns = @JoinColumn(name = "nickSeguido"))
-    List<Usuario> misSeguidos = new ArrayList<>();
+    List<Usuario> misSeguidos = new ArrayList<>(); //DEBERIA SER LOS ID NOMAS
 //    @ManyToMany
 //    @JoinTable(name = "Favoritas", joinColumns = @JoinColumn(name = "nick_usuario"), inverseJoinColumns = @JoinColumn(name = "titulo_propuesta"))
     List<Propuesta> misFavoritas = new ArrayList<>();

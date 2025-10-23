@@ -107,9 +107,39 @@ public class ConexionMongoDB {
         return database;
     }
     
+    public MongoDatabase getDatabase(String databaseName) throws Exception{
+        if(this.client == null){
+            if(!this.crearConexion()){
+                throw new Exception("No se ha podido crear la conexión con el servidor MongoDB.");
+            }
+        }
+        
+        MongoDatabase database = this.client.getDatabase(databaseName);
+        if(!getPing(database)){
+            throw new Exception("No se ha podido acceder a la base de datos.");
+        }
+        
+        return database;
+    }
+    
+    public void mostrarColecciones(String databaseName){
+        try{
+            MongoDatabase database = this.getDatabase(databaseName);
+            int i = 1;
+            logger.info("Colleciones de la base de datos: " + databaseName);
+            for(String collectionName : database.listCollectionNames()){
+                logger.info(String.format("Coleccion %d: %s", i, collectionName));
+                i++;
+            }
+            logger.info("Fin de colleciones de la base de datos: " + databaseName);
+        }catch (Exception e){
+            logger.error("Error mostrando colecciones: " + e.getMessage());
+        }
+    }
+    
     public MongoCollection<?> getCollection(String databaseName, String collectionName, Class entidad) throws Exception{
         MongoDatabase database = getDatabaseWithCodec(databaseName);
-        return database.getCollection(databaseName, entidad);
+        return database.getCollection(collectionName, entidad);
     }
     
     public void cerrarConexion(){

@@ -1,8 +1,10 @@
 package Logica;
 
 import Persistencia.ConexionMongoDB;
-import Persistencia.UsuarioDB;
+import Persistencia.ControladorPersistencia;
 import com.mongodb.MongoException;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,69 +24,62 @@ public class Controlador implements IControlador{
     public List<Propuesta> misPropuestas = new ArrayList<>();
     private static final Logger logger = LoggerFactory.getLogger(Controlador.class);
     
-    private final UsuarioDB usuarioDB;
+    public ConexionMongoDB mongoDB;
     
-    public Controlador() throws Exception {
-        ConexionMongoDB mongoDB = new ConexionMongoDB("localhost", 27017, "root", "1234");
-        try{
-            mongoDB.crearConexion();
-        }catch(MongoException e){
-            logger.error("Error: " + e.getMessage());
-        }
-        
-        this.usuarioDB = new UsuarioDB(mongoDB);
+    public Controlador(ConexionMongoDB mongoDB) throws Exception {
+        this.mongoDB = mongoDB;
     }
     
-    //ControladoraPersistencia cp = new ControladoraPersistencia();
+    ControladorPersistencia cp = new ControladorPersistencia(mongoDB);
     
-//    @Override //colaborador
-//    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String imagenWeb){
-//        String nickNuevo = nick;
-//        String correoNuevo = correo;
-//        
-//        ArrayList<Usuario> listaUsuarios = cp.getListaUsuarios();
-//        
-//        for(Usuario u : listaUsuarios){
-//            if(u.getNickname().equals(nickNuevo)){
-//                return 0;
-//            }
-//        }
-//        
-//        for(Usuario u : listaUsuarios){
-//            if(u.getEmail().equals(correoNuevo)){
-//                return 2;
-//            }
-//        }
-//        
-//        Colaborador colaNuevo = new Colaborador(nick, correo, nombre, apellido, fecNac, imagen, contraseña, imagenWeb);
-//        misUsuarios.add(colaNuevo);
-//        cp.añadirUsuario(colaNuevo);
-//        return 1;
-//    }
-//    
-//    @Override //proponente
-//    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String direccion, String bio, String sitioWeb, String imagenWeb){
-//        String nickNuevo = nick;
-//        String correoNuevo = correo;
-//
-//        ArrayList<Usuario> listaUsuarios = cp.getListaUsuarios();
-//        
-//        for(Usuario u : listaUsuarios){
-//            if(u.getNickname().equals(nickNuevo)){
-//                return 0;
-//            }
-//        }
-//        
-//        for(Usuario u : listaUsuarios){
-//            if(u.getEmail().equals(correoNuevo)){
-//                return 2;
-//            }
-//        }
-//        
-//        Proponente propNuevo = new Proponente(direccion, bio, sitioWeb, nick, correo, nombre, apellido, fecNac, imagen, contraseña, imagenWeb);
-//        cp.añadirUsuario(propNuevo);
-//        return 1;
-//    }
+    @Override //colaborador
+    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String imagenWeb){
+        String nickNuevo = nick;
+        String correoNuevo = correo;
+        
+        List<Usuario> listaUsuarios = cp.getListaUsuarios();
+        
+        for(Usuario u : listaUsuarios){
+            if(u.getNickname().equals(nickNuevo)){
+                return 0;
+            }
+        }
+        
+        for(Usuario u : listaUsuarios){
+            if(u.getEmail().equals(correoNuevo)){
+                return 2;
+            }
+        }
+        
+        Colaborador colaNuevo = new Colaborador(nick, correo, nombre, apellido, fecNac, imagen, contraseña, imagenWeb);
+        misUsuarios.add(colaNuevo);
+        cp.añadirUsuario(colaNuevo);
+        return 1;
+    }
+    
+    @Override //proponente
+    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String direccion, String bio, String sitioWeb, String imagenWeb){
+        String nickNuevo = nick;
+        String correoNuevo = correo;
+
+        List<Usuario> listaUsuarios = cp.getListaUsuarios();
+        
+        for(Usuario u : listaUsuarios){
+            if(u.getNickname().equals(nickNuevo)){
+                return 0;
+            }
+        }
+        
+        for(Usuario u : listaUsuarios){
+            if(u.getEmail().equals(correoNuevo)){
+                return 2;
+            }
+        }
+        
+        Proponente propNuevo = new Proponente(direccion, bio, sitioWeb, nick, correo, nombre, apellido, fecNac, imagen, contraseña, imagenWeb);
+        cp.añadirUsuario(propNuevo);
+        return 1;
+    }
 //    
 //    @Override
 //    public int altaCategoria(String nombreCat){
@@ -902,15 +897,15 @@ public class Controlador implements IControlador{
 //        return new DataComentario(a.getComentario(),a.getFecComentario(),nick,titulo);               
 //    }   
 
-    @Override
-    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String direccion, String bio, String sitioWeb, String imagenWeb) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+//    @Override
+//    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String direccion, String bio, String sitioWeb, String imagenWeb) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
 
-    @Override
-    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String imagenWeb) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+//    @Override
+//    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String imagenWeb) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
 
     @Override
     public int altaCategoria(String nombreCat) {

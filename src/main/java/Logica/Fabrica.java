@@ -1,5 +1,7 @@
 package Logica;
 
+import Persistencia.ConexionMongoDB;
+
 public class Fabrica {
     private static Fabrica instancia;
 
@@ -13,7 +15,7 @@ public class Fabrica {
         return instancia;
     }
     
-    public IControlador getIControlador() throws Exception{
-        return new Controlador();
+    public IControlador getIControlador(ConexionMongoDB mongoDB) throws Exception{
+        return new Controlador(mongoDB);
     }
 }
