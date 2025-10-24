@@ -97,7 +97,7 @@ public class ConexionMongoDB {
             }
         }
         
-        CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+        CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).register("Logica").build();
         CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), CodecRegistries.fromProviders(pojoCodecProvider));
         MongoDatabase database = this.client.getDatabase(databaseName).withCodecRegistry(pojoCodecRegistry);
         if(!getPing(database)){

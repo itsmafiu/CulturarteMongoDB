@@ -8,7 +8,7 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
 //@Entity
 //@PrimaryKeyJoinColumn(name = "nickname")
-@BsonDiscriminator(key = "tipo", value = "Proponente")
+@BsonDiscriminator(value = "Proponente")
 public class Proponente extends Usuario {
 
     
@@ -17,6 +17,7 @@ public class Proponente extends Usuario {
     String biografia = "";
     String sitioWeb = "";
     List<Propuesta> misPropuestas;
+    
     public Proponente() {
         
     }

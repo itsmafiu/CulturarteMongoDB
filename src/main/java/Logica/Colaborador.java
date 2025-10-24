@@ -9,7 +9,7 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
 //@Entity
 //@PrimaryKeyJoinColumn(name = "nickname")
-@BsonDiscriminator(key = "tipo", value = "Colaborador")
+@BsonDiscriminator(value = "Colaborador")
 public class Colaborador extends Usuario {
     
 //    @OneToMany(mappedBy = "miColaborador")

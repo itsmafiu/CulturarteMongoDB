@@ -2,9 +2,6 @@ package Logica;
 
 import Persistencia.ConexionMongoDB;
 import Persistencia.ControladorPersistencia;
-import com.mongodb.MongoException;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,6 +50,7 @@ public class Controlador implements IControlador{
         
         Colaborador colaNuevo = new Colaborador(nick, correo, nombre, apellido, fecNac, imagen, contraseña, imagenWeb);
         //misUsuarios.add(colaNuevo);
+        colaNuevo.setTipo("Colaborador");
         cp.añadirUsuario(colaNuevo);
         return 1;
     }
@@ -77,6 +75,7 @@ public class Controlador implements IControlador{
         }
         
         Proponente propNuevo = new Proponente(direccion, bio, sitioWeb, nick, correo, nombre, apellido, fecNac, imagen, contraseña, imagenWeb);
+        propNuevo.setTipo("Proponente");
         cp.añadirUsuario(propNuevo);
         return 1;
     }
@@ -99,7 +98,6 @@ public class Controlador implements IControlador{
         try {
             cp.createCategoria(nueva);
         } catch (Exception e){
-            e.printStackTrace();
             return -3; //Error de persistencia
         }
         return 0; //Funciono
@@ -126,7 +124,6 @@ public class Controlador implements IControlador{
         try {
             cp.createCategoria(nueva);
         } catch (Exception e){
-            e.printStackTrace();
             return -3; //Error de persistencia
         }
             
@@ -580,6 +577,7 @@ public class Controlador implements IControlador{
           return listaPropuestas;
     }
     
+    @Override
     public List<String> getPropuestasI(){
         List<String> listaPropuestas = new ArrayList<>();
           String aux;

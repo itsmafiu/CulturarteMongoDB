@@ -11,11 +11,12 @@ import org.bson.codecs.pojo.annotations.BsonId;
 //@Table(name="Usuario")
 //@Inheritance(strategy = InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
-@BsonDiscriminator // puede tener herencias
+@BsonDiscriminator(key = "tipo", value = "usuario") // puede tener herencias
 public class Usuario implements Serializable {
 //    @Id
     @BsonId
     String nickname;
+    String tipo;
 //    @Basic(optional = false)
     String email;
     String contraseña;
@@ -100,6 +101,14 @@ public class Usuario implements Serializable {
 
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
     
     
