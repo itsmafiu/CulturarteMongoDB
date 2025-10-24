@@ -2,6 +2,7 @@ package Logica;
 
 import Persistencia.ConexionMongoDB;
 import Persistencia.ControladorPersistencia;
+import ch.qos.logback.core.read.ListAppender;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -292,14 +293,6 @@ public class Controlador implements IControlador{
     @Override
     public List<String> getUsuarios() {
         List<String> listaNombres = new ArrayList<>();
-        
-//        String aux;
-//        for(Usuario u : misUsuarios){
-//            aux = u.getNickname();
-//            listaNombres.add(aux);
-//        }
-        
-//        si fuera con persistencia
         List<Usuario> listaUsuarios = cp.getListaUsuarios();
         String aux;
         for(Usuario u : listaUsuarios){
@@ -365,40 +358,12 @@ public class Controlador implements IControlador{
     
     @Override
     public List<String> getSeguidos(String seguidor) {
-//        List<String> listaNombres = new ArrayList<>();
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(seguidor)){
-//                listaNombres = u.getSeguidos();
-//                break;
-//            }
-//        }
-
-//        persistencia
-        List<String> listaNombres;
         Usuario usu = cp.buscarUsuario(seguidor);
-        listaNombres = usu.getSeguidos();
-        
-        return listaNombres;
+        return usu.getSeguidos();
     }
 
     @Override
     public int seguirUsuario(String nick1, String nick2) {
-//        Usuario seguidor = null;
-//        Usuario seguir = null;
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(nick1)){
-//                seguidor = u;
-//                break;
-//            }
-//        }
-//        
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(nick2)){
-//                seguir = u;
-//                break;
-//            }
-//        }
-//        persistencia
         Usuario seguidor, seguir;
         seguidor = cp.buscarUsuario(nick1);
         seguir = cp.buscarUsuario(nick2);
@@ -406,31 +371,13 @@ public class Controlador implements IControlador{
         int resultado = seguidor.seguirUsuario(seguir);
         if (resultado == 0) {
             return 0; //error 0: ya sigue al usuario nick2
-        }else{
-            //persistencia
-            cp.editarUsuario(seguidor);
-            return 1;
         }
+        cp.seguirUsuario(seguidor, seguir);
+        return 1;
     }
     
     @Override
     public int dejarSeguirUsuario(String nick1, String nick2){
-//        Usuario seguidor = null;
-//        Usuario seguir = null;
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(nick1)){
-//                seguidor = u;
-//                break;
-//            }
-//        }
-//        
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(nick2)){
-//                seguir = u;
-//                break;
-//            }
-//        }
-        
         //persistencia
         Usuario seguidor, seguir;
         seguidor = cp.buscarUsuario(nick1);
