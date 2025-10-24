@@ -493,7 +493,7 @@ public class Controlador implements IControlador{
         
         Categoria c  = cp.findCategoria(tipo);
         
-        Propuesta nuevaProp = new Propuesta(c, prop, titulo, descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, fechaActual, imagen);
+        Propuesta nuevaProp = new Propuesta(c.getNombre(), prop.getNickname(), titulo, descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, fechaActual, imagen);
 //        misPropuestas.add(nuevaProp);
           cp.añadirEstado(nuevaProp.getEstadoActual());
           cp.añadirPropuesta(nuevaProp);
@@ -538,12 +538,12 @@ public class Controlador implements IControlador{
         //Quitar esta propuesta de la categoria que la apuntaba (por el caso de cambio de categoria) hacerlo directo con persistencia
         if(!p.getCategoria().equals(c.getNombre())){ //p.getCategoria no anda
 //            //Quitar esta propuesta de la categoria que la apuntaba
-              Categoria viejaCat = p.getCategoriaClase(); //Aca saco la categoria que tenia antes ya que aun no se modifico
+              Categoria viejaCat = cp.findCategoria(p.getCategoriaClase()); //Aca saco la categoria que tenia antes ya que aun no se modifico
               viejaCat.sacarPropuesta(p); //La saco de su lista de propuestas
               cp.editarCategoria(viejaCat); //mando el edit para reflejar cambios en BD
               seCambioCat = true;
         }
-        p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c);
+        p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c.getNombre());
         //cp.modificarPropuesta(p);
         
         //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
@@ -641,7 +641,8 @@ public class Controlador implements IControlador{
         Proponente p = (Proponente) cp.buscarUsuario(NickName);
                 List<DataPropuesta> propuestasDe = new ArrayList<>();
                 DataPropuesta dataProp;
-                for(Propuesta prop : p.getPropuestas()){
+                for(String propuestas : p.getPropuestas()){
+                    DataPropuesta prop = consultaDePropuesta(propuestas);
                     dataProp = new DataPropuesta(prop.getAlcanzada(),prop.getTitulo(),prop.getEstadoActual(),prop.getLugar());
                     propuestasDe.add(dataProp);
                 }

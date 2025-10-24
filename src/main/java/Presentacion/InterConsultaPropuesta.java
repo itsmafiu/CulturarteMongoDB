@@ -364,7 +364,7 @@ public class InterConsultaPropuesta extends javax.swing.JInternalFrame {
                 retorno = "%VENTAS";
             }
 
-           this.txtNickname.setText(DP.getProponente().getNickname());
+           this.txtNickname.setText(DP.getProponente());
            this.txtTitulo.setText(DP.getTitulo());
            this.txtEstado.setText(DP.getEstadoActual().getEstado().toString());
            this.txtDescrip.setText(DP.getDescripcion());

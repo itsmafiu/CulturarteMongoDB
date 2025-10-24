@@ -8,9 +8,18 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.BsonInt64;
+import org.bson.BsonReader;
+import org.bson.BsonWriter;
+import org.bson.codecs.Codec;
+import org.bson.codecs.DecoderContext;
+import org.bson.codecs.EncoderContext;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -90,22 +99,63 @@ public class ConexionMongoDB {
         }
     }
     
-    public MongoDatabase getDatabaseWithCodec(String databaseName) throws Exception {
-        if(this.client == null){
-            if(!this.crearConexion()){
-                throw new Exception("No se ha podido crear la conexión con el servidor MongoDB.");
-            }
-        }
-        
-        CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).register("Logica").build();
-        CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), CodecRegistries.fromProviders(pojoCodecProvider));
-        MongoDatabase database = this.client.getDatabase(databaseName).withCodecRegistry(pojoCodecRegistry);
-        if(!getPing(database)){
-            throw new Exception("No se ha podido acceder a la base de datos.");
-        }
-        
-        return database;
+    public class LocalDateCodec implements Codec<LocalDate> {
+    @Override
+    public void encode(BsonWriter writer, LocalDate value, EncoderContext encoderContext) {
+        writer.writeDateTime(value.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
     }
+
+    @Override
+    public LocalDate decode(BsonReader reader, DecoderContext decoderContext) {
+        return Instant.ofEpochMilli(reader.readDateTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    @Override
+    public Class<LocalDate> getEncoderClass() {
+        return LocalDate.class;
+    }
+}
+
+public class LocalDateTimeCodec implements Codec<LocalDateTime> {
+    @Override
+    public void encode(BsonWriter writer, LocalDateTime value, EncoderContext encoderContext) {
+        writer.writeDateTime(value.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    }
+
+    @Override
+    public LocalDateTime decode(BsonReader reader, DecoderContext decoderContext) {
+        return Instant.ofEpochMilli(reader.readDateTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    @Override
+    public Class<LocalDateTime> getEncoderClass() {
+        return LocalDateTime.class;
+    }
+}
+    
+public MongoDatabase getDatabaseWithCodec(String databaseName) throws Exception {
+    if (this.client == null) {
+        if (!this.crearConexion()) {
+            throw new Exception("No se ha podido crear la conexión con el servidor MongoDB.");
+        }
+    }
+
+    CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+
+    CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
+        MongoClientSettings.getDefaultCodecRegistry(),
+        CodecRegistries.fromProviders(pojoCodecProvider),
+        CodecRegistries.fromCodecs(new LocalDateCodec(), new LocalDateTimeCodec())
+    );
+
+    MongoDatabase database = this.client.getDatabase(databaseName).withCodecRegistry(pojoCodecRegistry);
+
+    if (!getPing(database)) {
+        throw new Exception("No se ha podido acceder a la base de datos.");
+    }
+
+    return database;
+}
     
     public MongoDatabase getDatabase(String databaseName) throws Exception{
         if(this.client == null){

@@ -15,7 +15,7 @@ public class DataPropuesta {
     String titulo;
     String imagen;
     Estado estadoActual;
-    Proponente p;
+    String p;
     String desc;
     String lugar;
     double $entrada;
@@ -27,7 +27,7 @@ public class DataPropuesta {
     String nickProponenteDe;
     
     
-    public DataPropuesta(String titulo, String imagen, Estado estadoActual, Proponente p, String descrip, String lugar, double entrada, double necesaria,double alcanzada, LocalDate fechaP, EnumRetorno retorno, String categoria){
+    public DataPropuesta(String titulo, String imagen, Estado estadoActual, String p, String descrip, String lugar, double entrada, double necesaria,double alcanzada, LocalDate fechaP, EnumRetorno retorno, String categoria){
         this.$alcanzada = alcanzada;
         this.titulo = titulo;
         this.imagen = imagen;
@@ -74,7 +74,7 @@ public class DataPropuesta {
         return this.estadoActual;
     }
     
-    public Proponente getProponente(){
+    public String getProponente(){
         return this.p;
     }
     

@@ -129,7 +129,7 @@ public class InterEvaluarPropuesta extends javax.swing.JInternalFrame {
         String titulo = ComboPropuestas.getItemAt(op);
         if (titulo != "--Seleccionar--") {
             DataPropuesta DP = ic.consultaDePropuesta(titulo);
-            txtProponente.setText(DP.getProponente().getNickname());
+            txtProponente.setText(DP.getProponente());
         }else{
             txtProponente.setText("");
         }

@@ -95,13 +95,13 @@ public class ControladorPersistencia {
 
     public void añadirPropuesta(Propuesta p) {
         this.propuDB.insertOne(p);
-
-        Proponente prop = p.getProponente();
+        
+        Proponente prop = (Proponente) usuDB.find(eq("_id", p.getProponente())).first();
         if(!prop.getPropuestas().contains(p)){
-            prop.agregarPropuesta(p); //Sin esto no se guarda en PROPONENTE_Propuesta aunque claro
+            prop.agregarPropuesta(p.getTitulo()); //Sin esto no se guarda en PROPONENTE_Propuesta aunque claro
             editarUsuario(prop);  //no hay que olvidarte el .edit para que se persista
         }
-        Categoria cat = p.getCategoriaClase();
+        Categoria cat = findCategoria(p.getCategoriaClase());
         if (!cat.getPropuestas().contains(p)) { 
             cat.agregarPropuesta(p); //Lo mismo con esto pero aca se agrega la FK en Propuesta
             editarCategoria(cat);
@@ -109,7 +109,13 @@ public class ControladorPersistencia {
     }
 
     public List<Propuesta> getListaPropuestas() {
-        return propuDB.find().into(new ArrayList<>());
+        List<Propuesta> propuestas = new ArrayList<>();
+
+    for (Propuesta p : propuDB.find()) {
+        propuestas.add(p);
+    }
+
+    return propuestas;
     }
     
     public Propuesta getPropuesta(String titulo){

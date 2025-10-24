@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 //@Entity
 //@Table(name="Categoria")
@@ -18,9 +19,11 @@ public class Categoria implements Serializable{
     //mantener la Jerarquia entre Categorias sacando las Categorias de la base de Datos
     
 //    @OneToMany(mappedBy="padre")
+    @BsonIgnore
     private List<Categoria> hijas = new ArrayList<>();
     
 //    @OneToMany(mappedBy = "categoria")
+    @BsonIgnore
     private List<Propuesta> misPropuestas = new ArrayList();
 
     public Categoria() {
