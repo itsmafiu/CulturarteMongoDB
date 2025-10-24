@@ -16,7 +16,7 @@ public class Proponente extends Usuario {
 //    @Column(name="descripcion",length=1000)
     String biografia = "";
     String sitioWeb = "";
-    List<Propuesta> misPropuestas;
+    List<String> misPropuestas = new ArrayList<>();
     
     public Proponente() {
         
@@ -53,10 +53,10 @@ public class Proponente extends Usuario {
     public void setSitioWeb(String sitioWeb) {
         this.sitioWeb = sitioWeb;
     }
-    public void agregarPropuesta(Propuesta nuevaProp){
+    public void agregarPropuesta(String nuevaProp){
         this.misPropuestas.add(nuevaProp);
     }
-    public List<Propuesta> getPropuestas(){
+    public List<String> getPropuestas(){
         return this.misPropuestas;
     }   
 }

@@ -413,7 +413,7 @@ public class InterModificarPropuesta extends javax.swing.JInternalFrame {
                 retorno = "%VENTAS";
             }
 
-            this.textoNick.setText(DP.getProponente().getNickname());
+            this.textoNick.setText(DP.getProponente());
             this.textoTitulo.setText(DP.getTitulo());
             this.textoCategoria.setText(DP.getCategoria());
             this.textoEstado.setText(DP.getEstadoActual().getEstado().toString());

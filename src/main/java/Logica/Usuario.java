@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 
 //@Entity
 //@Table(name="Usuario")
@@ -27,7 +28,8 @@ public class Usuario implements Serializable {
     String imagenWeb = "";
 //    @OneToMany
 //    @JoinTable(name = "UsuarioSeguidos", joinColumns = @JoinColumn(name = "nickSeguidor"), inverseJoinColumns = @JoinColumn(name = "nickSeguido"))
-    List<Usuario> misSeguidos = new ArrayList<>(); //DEBERIA SER LOS ID NOMAS
+    @BsonProperty("misSeguidos")
+    List<String> misSeguidos = new ArrayList<>(); //DEBERIA SER LOS ID NOMAS
 //    @ManyToMany
 //    @JoinTable(name = "Favoritas", joinColumns = @JoinColumn(name = "nick_usuario"), inverseJoinColumns = @JoinColumn(name = "titulo_propuesta"))
     List<Propuesta> misFavoritas = new ArrayList<>();
@@ -110,35 +112,61 @@ public class Usuario implements Serializable {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public List<String> getMisSeguidos() {
+        return misSeguidos;
+    }
+
+    public void setMisSeguidos(List<String> misSeguidos) {
+        this.misSeguidos = misSeguidos;
+    }
     
     
     
-    public int seguirUsuario(Usuario nick){
-        for(Usuario u : this.misSeguidos){
-            if(u.getNickname().equals(nick.getNickname())){
-                return 0; //error: ya sigue al usuario nick
-            }
+    public int seguirUsuario(Usuario usu){
+//        for(Usuario u : this.misSeguidos){
+//            if(u.getNickname().equals(usu.getNickname())){
+//                return 0; //error: ya sigue al usuario nick
+//            }
+//        }
+//        this.misSeguidos.add(usu);
+//        return 1;
+//        
+        if(this.misSeguidos.contains(usu.getNickname())){
+            return 0; //error: ya sigue al usuario nick
         }
-        this.misSeguidos.add(nick);
+        this.misSeguidos.add(usu.getNickname());
         return 1;
     }
     
     public int dejarDeSeguir(Usuario nick){
-        for(Usuario u : this.misSeguidos){
-            if(u.getNickname().equals(nick.getNickname())){
-                this.misSeguidos.remove(u);
-                return 1;
-            }
+//        for(Usuario u : this.misSeguidos){
+//            if(u.getNickname().equals(nick.getNickname())){
+//                this.misSeguidos.remove(u);
+//                return 1;
+//            }
+//        }
+//        return 0; //error 0: no se encuentra
+
+        if(this.misSeguidos.contains(nick.getNickname())){
+            this.misSeguidos.remove(nick.getNickname());
+            return 1;
         }
         return 0; //error 0: no se encuentra
     }
     
     public List<String> getSeguidos(){
-        List<String> listaSeguidos = new ArrayList<>();
-        for(Usuario u : this.misSeguidos){
-            listaSeguidos.add(u.getNickname());
+//        List<String> listaSeguidos = new ArrayList<>();
+//        for(Usuario u : this.misSeguidos){
+//            listaSeguidos.add(u.getNickname());
+//        }
+//        return listaSeguidos;
+        System.out.println("lista seguidos en usuario:");
+        for(String s : this.misSeguidos){
+            System.out.println(s);
         }
-        return listaSeguidos;
+        System.out.println("fin lista");
+        return this.misSeguidos;
     }
     
         public List<Propuesta> getMisFavoritas() {

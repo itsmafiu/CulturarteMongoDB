@@ -2,6 +2,7 @@ package Logica;
 
 import Persistencia.ConexionMongoDB;
 import Persistencia.ControladorPersistencia;
+import ch.qos.logback.core.read.ListAppender;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -292,14 +293,6 @@ public class Controlador implements IControlador{
     @Override
     public List<String> getUsuarios() {
         List<String> listaNombres = new ArrayList<>();
-        
-//        String aux;
-//        for(Usuario u : misUsuarios){
-//            aux = u.getNickname();
-//            listaNombres.add(aux);
-//        }
-        
-//        si fuera con persistencia
         List<Usuario> listaUsuarios = cp.getListaUsuarios();
         String aux;
         for(Usuario u : listaUsuarios){
@@ -365,40 +358,12 @@ public class Controlador implements IControlador{
     
     @Override
     public List<String> getSeguidos(String seguidor) {
-//        List<String> listaNombres = new ArrayList<>();
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(seguidor)){
-//                listaNombres = u.getSeguidos();
-//                break;
-//            }
-//        }
-
-//        persistencia
-        List<String> listaNombres;
         Usuario usu = cp.buscarUsuario(seguidor);
-        listaNombres = usu.getSeguidos();
-        
-        return listaNombres;
+        return usu.getSeguidos();
     }
 
     @Override
     public int seguirUsuario(String nick1, String nick2) {
-//        Usuario seguidor = null;
-//        Usuario seguir = null;
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(nick1)){
-//                seguidor = u;
-//                break;
-//            }
-//        }
-//        
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(nick2)){
-//                seguir = u;
-//                break;
-//            }
-//        }
-//        persistencia
         Usuario seguidor, seguir;
         seguidor = cp.buscarUsuario(nick1);
         seguir = cp.buscarUsuario(nick2);
@@ -406,31 +371,13 @@ public class Controlador implements IControlador{
         int resultado = seguidor.seguirUsuario(seguir);
         if (resultado == 0) {
             return 0; //error 0: ya sigue al usuario nick2
-        }else{
-            //persistencia
-            cp.editarUsuario(seguidor);
-            return 1;
         }
+        cp.seguirUsuario(seguidor, seguir);
+        return 1;
     }
     
     @Override
     public int dejarSeguirUsuario(String nick1, String nick2){
-//        Usuario seguidor = null;
-//        Usuario seguir = null;
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(nick1)){
-//                seguidor = u;
-//                break;
-//            }
-//        }
-//        
-//        for(Usuario u : this.misUsuarios){
-//            if(u.getNickname().equals(nick2)){
-//                seguir = u;
-//                break;
-//            }
-//        }
-        
         //persistencia
         Usuario seguidor, seguir;
         seguidor = cp.buscarUsuario(nick1);
@@ -493,7 +440,7 @@ public class Controlador implements IControlador{
         
         Categoria c  = cp.findCategoria(tipo);
         
-        Propuesta nuevaProp = new Propuesta(c, prop, titulo, descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, fechaActual, imagen);
+        Propuesta nuevaProp = new Propuesta(c.getNombre(), prop.getNickname(), titulo, descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, fechaActual, imagen);
 //        misPropuestas.add(nuevaProp);
           cp.añadirEstado(nuevaProp.getEstadoActual());
           cp.añadirPropuesta(nuevaProp);
@@ -538,12 +485,12 @@ public class Controlador implements IControlador{
         //Quitar esta propuesta de la categoria que la apuntaba (por el caso de cambio de categoria) hacerlo directo con persistencia
         if(!p.getCategoria().equals(c.getNombre())){ //p.getCategoria no anda
 //            //Quitar esta propuesta de la categoria que la apuntaba
-              Categoria viejaCat = p.getCategoriaClase(); //Aca saco la categoria que tenia antes ya que aun no se modifico
+              Categoria viejaCat = cp.findCategoria(p.getCategoriaClase()); //Aca saco la categoria que tenia antes ya que aun no se modifico
               viejaCat.sacarPropuesta(p); //La saco de su lista de propuestas
               cp.editarCategoria(viejaCat); //mando el edit para reflejar cambios en BD
               seCambioCat = true;
         }
-        p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c);
+        p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c.getNombre());
         //cp.modificarPropuesta(p);
         
         //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
@@ -641,7 +588,8 @@ public class Controlador implements IControlador{
         Proponente p = (Proponente) cp.buscarUsuario(NickName);
                 List<DataPropuesta> propuestasDe = new ArrayList<>();
                 DataPropuesta dataProp;
-                for(Propuesta prop : p.getPropuestas()){
+                for(String propuestas : p.getPropuestas()){
+                    DataPropuesta prop = consultaDePropuesta(propuestas);
                     dataProp = new DataPropuesta(prop.getAlcanzada(),prop.getTitulo(),prop.getEstadoActual(),prop.getLugar());
                     propuestasDe.add(dataProp);
                 }

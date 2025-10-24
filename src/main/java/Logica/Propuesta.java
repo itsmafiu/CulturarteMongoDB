@@ -5,7 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 
 
@@ -36,15 +39,15 @@ public class Propuesta implements Serializable {
 //    @JoinTable(name = "ListaEstados", joinColumns = @JoinColumn(name = "tituloPropuesta"), inverseJoinColumns = @JoinColumn(name = "numeracionEstado"))
     public List<Estado> misEstados = new ArrayList<>();//A CAMBIAR
 //    @ManyToOne
-    private Proponente miProponente;
+    private String miProponente;
 //    @ManyToOne
 //    @JoinColumn(name = "nombre_Categoria")
-    private Categoria categoria;
+    private String categoria;
     
     public Propuesta(){
     }
 
-    public Propuesta(Proponente prop, String titulo, String descripcion, String lugar, LocalDate fechaPrev, double montoXentrada, double montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual) {
+    public Propuesta(String prop, String titulo, String descripcion, String lugar, LocalDate fechaPrev, double montoXentrada, double montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual) {
         this.miProponente = prop;
         this.titulo = titulo;
         this.descrip = descripcion;
@@ -63,7 +66,7 @@ public class Propuesta implements Serializable {
         //DIALOGAR PARA VER QUE HACEMOS CON ESTA EN ESPECIFICO!!!!!!!!!!!!!
     }
     
-    public Propuesta(Categoria c,Proponente prop, String titulo, String descripcion, String lugar, LocalDate fechaPrev, double montoXentrada, double montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual) {
+    public Propuesta(String c,String prop, String titulo, String descripcion, String lugar, LocalDate fechaPrev, double montoXentrada, double montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual) {
         this.miProponente = prop;
         this.titulo = titulo;
         this.descrip = descripcion;
@@ -82,7 +85,7 @@ public class Propuesta implements Serializable {
 
     }
     
-    public Propuesta(Categoria c, Proponente prop, String titulo, String descripcion, String lugar, LocalDate fechaPrev, double montoXentrada, double montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual, String imagen) {
+    public Propuesta(String c, String prop, String titulo, String descripcion, String lugar, LocalDate fechaPrev, double montoXentrada, double montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual, String imagen) {
         this.miProponente = prop;
         this.titulo = titulo;
         this.descrip = descripcion;
@@ -103,7 +106,7 @@ public class Propuesta implements Serializable {
 
     }
     
-    public void modificarPropuesta(String descripcion, String lugar, LocalDate fechaPrev, double montoXentrada, double montoNecesario, String posibleRetorno, String estado, String imagen, Categoria c){
+    public void modificarPropuesta(String descripcion, String lugar, LocalDate fechaPrev, double montoXentrada, double montoNecesario, String posibleRetorno, String estado, String imagen, String c){
         this.descrip = descripcion;
         this.lugar = lugar;
         this.fechaPubli = fechaPrev;
@@ -129,7 +132,7 @@ public class Propuesta implements Serializable {
     }
     
      public String getTitulo_Nickname(){
-        return this.titulo+" by "+this.miProponente.getNickname();
+        return this.titulo+" by "+this.miProponente;
     }
 
     public double getmontoNecesaria() {
@@ -171,7 +174,7 @@ public class Propuesta implements Serializable {
         return this.estadoActual;
     }
     
-    public Proponente getProponente(){
+    public String getProponente(){
         return this.miProponente;
     }
     
@@ -208,9 +211,9 @@ public class Propuesta implements Serializable {
     }
     
     public String getCategoria(){
-        return this.categoria.getNombre();
+        return this.categoria;
     }
-    public Categoria getCategoriaClase(){
+    public String getCategoriaClase(){
         return this.categoria;
     }
     public Double getAlcanzada(){

@@ -13,7 +13,7 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 public class Colaborador extends Usuario {
     
 //    @OneToMany(mappedBy = "miColaborador")
-    private List<Aporte> misAportes;
+    private List<Aporte> misAportes = new ArrayList<>();
 
     public Colaborador() {
         //this.misAportes = new ArrayList<>();

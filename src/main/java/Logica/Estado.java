@@ -12,7 +12,7 @@ public class Estado implements Serializable {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     @BsonId
-    ObjectId numeracion;
+    ObjectId numeracion = new ObjectId();
     EnumEstado estado;
     LocalDate fecha;
 
