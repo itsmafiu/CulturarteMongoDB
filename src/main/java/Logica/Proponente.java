@@ -16,7 +16,7 @@ public class Proponente extends Usuario {
 //    @Column(name="descripcion",length=1000)
     String biografia = "";
     String sitioWeb = "";
-    List<Propuesta> misPropuestas;
+    List<Propuesta> misPropuestas = new ArrayList<>();
     
     public Proponente() {
         

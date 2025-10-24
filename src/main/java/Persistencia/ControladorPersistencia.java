@@ -10,10 +10,12 @@ import Logica.Usuario;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bson.conversions.Bson;
 
 public class ControladorPersistencia {
     public ConexionMongoDB mongoDB;
@@ -54,6 +56,11 @@ public class ControladorPersistencia {
     
     public Usuario buscarUsuario(String nick) {
         return usuDB.find(eq("_id", nick)).first();
+    }
+    
+    public void seguirUsuario(Usuario seguidor, Usuario seguido){
+        Bson update = Updates.addToSet("misSeguidos", seguido.getNickname());
+        usuDB.updateOne(eq("_id", seguidor.getNickname()), update);
     }
     
     public Proponente buscarProponente(String nick) {
