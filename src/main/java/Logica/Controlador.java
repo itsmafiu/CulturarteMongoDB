@@ -417,30 +417,14 @@ public class Controlador implements IControlador{
         Propuesta p = cp.getPropuesta(titulo);
         
         p.modificarPropuesta(p.getDescrip(), p.getLugar(), p.getFechaPubli(), p.getMontoEntrada(), p.getMontoNecesaria(), p.getPosibleRetorno().toString(), estado, p.getImagen(), p.getCategoria());
-        //cp.modificarPropuesta(p);
+        cp.editarPropuesta(p);
         
         return 0;
     }
     
     @Override
     public int modificarPropuesta(String titulo, String descripcion, String lugar, LocalDate fechaPrev, String montoXentrada, String montoNecesario, String posibleRetorno, String estado, String imagen, String categoria){
-        
-//        for(Propuesta p : this.misPropuestas){
-//            if(p.getTitulo().equals(titulo)){
-//                Categoria c = cp.findCategoria(categoria);
-//                //Ya se busca directamente en la BD el arbol categoria no tendra los
-//                 //datos
-//                
-//                //Quitar esta propuesta de la categoria que la apuntaba (por el caso de cambio de categoria) hacerlo directo con persistencia
-//                p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada),Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c);
-//                //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
-//                return 0;
-//            }
-//        }
-//        return 1; //error 1: no deberia llegar acá
-
-///////////////persistencia/////////////////
-        
+    
         Propuesta p = cp.getPropuesta(titulo);
         Categoria c = cp.findCategoria(categoria);
         //Ya se busca directamente en la BD el arbol categoria no tendra los
@@ -455,7 +439,7 @@ public class Controlador implements IControlador{
               seCambioCat = true;
         }
         p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c.getNombre());
-        //cp.modificarPropuesta(p);
+        cp.editarPropuesta(p);
         
         //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
         if(seCambioCat){
