@@ -19,7 +19,7 @@ public class UtilArbol {
         Categoria cat = (Categoria) raizCategorias.getUserObject();
         DefaultMutableTreeNode nodoCategoria = new DefaultMutableTreeNode(cat.getNombre());
         
-        for(Propuesta prop : cat.getPropuestas()){
+        for(Propuesta prop : cat.getMisPropuestas()){
             nodoCategoria.add(new DefaultMutableTreeNode(prop.getTitulo()));
         }
         

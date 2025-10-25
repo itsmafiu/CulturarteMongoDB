@@ -359,7 +359,7 @@ public class Controlador implements IControlador{
     @Override
     public List<String> getSeguidos(String seguidor) {
         Usuario usu = cp.buscarUsuario(seguidor);
-        return usu.getSeguidos();
+        return usu.getMisSeguidos();
     }
 
     @Override
@@ -372,7 +372,7 @@ public class Controlador implements IControlador{
         if (resultado == 0) {
             return 0; //error 0: ya sigue al usuario nick2
         }
-        cp.seguirUsuario(seguidor, seguir);
+        cp.editarUsuario(seguidor);
         return 1;
     }
     
@@ -395,43 +395,7 @@ public class Controlador implements IControlador{
     
     @Override
     public int altaPropuesta(String nick, String tipo, String titulo, String descripcion, String lugar, LocalDate fechaPrev, String montoXentrada, String montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual, String imagen){
-        
-//        Proponente prop = null;
-//        
-//        boolean encontrado = false;
-//        for (Proponente p : misProponentes) {
-//            if (p.getNickname().equalsIgnoreCase(nick)) {
-//                encontrado = true;
-//                prop = p;
-//                break;
-//            }
-//        }
-//        
-//        Categoria c = cp.findCategoria(tipo); ESTO NO TENDRIA PORQUE ESTAR ACA xd
-//        //Ya se busca directamente en la BD el arbol categoria no tendra los
-//        //datos
-//        if (c == null) {
-//            // NO SE ENCONTRO LA CATEGORIA o PUSO "CATEGORIA"
-//            return 0;
-//        }
-//        
-//        if(tipo.equals("Categoria")){
-//            return -1;
-//        }
-//        
-//        
-//        if (encontrado) {
-//            
-//            Propuesta nuevaProp = new Propuesta(c, prop, titulo, descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, fechaActual, imagen);
-//            misPropuestas.add(nuevaProp);
-//            //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
-//            return 1;
-//        } else {
-//            return 0;
-//        }
-        
-        //PERSISTENCIA
-        
+     
         if (existeTitulo(titulo)) {
             return -1;
         }
@@ -452,7 +416,7 @@ public class Controlador implements IControlador{
     public int cambiarEstadoPropuesta(String titulo, String estado){
         Propuesta p = cp.getPropuesta(titulo);
         
-        p.modificarPropuesta(p.getDescripcion(), p.getLugar(), p.getFechaARealizar(), p.getEntrada(), p.getNecesaria(), p.getPosibleRetorno().toString(), estado, p.getImagen(), p.getCategoriaClase());
+        p.modificarPropuesta(p.getDescrip(), p.getLugar(), p.getFechaPubli(), p.getMontoEntrada(), p.getMontoNecesaria(), p.getPosibleRetorno().toString(), estado, p.getImagen(), p.getCategoria());
         //cp.modificarPropuesta(p);
         
         return 0;
@@ -485,7 +449,7 @@ public class Controlador implements IControlador{
         //Quitar esta propuesta de la categoria que la apuntaba (por el caso de cambio de categoria) hacerlo directo con persistencia
         if(!p.getCategoria().equals(c.getNombre())){ //p.getCategoria no anda
 //            //Quitar esta propuesta de la categoria que la apuntaba
-              Categoria viejaCat = cp.findCategoria(p.getCategoriaClase()); //Aca saco la categoria que tenia antes ya que aun no se modifico
+              Categoria viejaCat = cp.findCategoria(p.getCategoria()); //Aca saco la categoria que tenia antes ya que aun no se modifico
               viejaCat.sacarPropuesta(p); //La saco de su lista de propuestas
               cp.editarCategoria(viejaCat); //mando el edit para reflejar cambios en BD
               seCambioCat = true;
@@ -519,8 +483,10 @@ public class Controlador implements IControlador{
           String aux;
           for (Propuesta p : cp.getListaPropuestas()) {
               aux = p.getTitulo();
+              System.out.println("titulo: " + aux);
               listaPropuestas.add(aux); 
-            }
+          }
+          System.out.println("Lista Propuestas:" + listaPropuestas);
           return listaPropuestas;
     }
     
@@ -554,7 +520,7 @@ public class Controlador implements IControlador{
 
         //persistencia
         Propuesta p = cp.getPropuesta(titulo);
-        return new DataPropuesta(titulo, p.getImagen(), p.getEstadoActual(), p.getProponente(), p.getDescripcion(), p.getLugar(), p.getEntrada(), p.getNecesaria(),p.getAlcanzada() , p.getFechaARealizar(), p.getRetorno(), p.getCategoria()/*"SIN FUNCIONAR"*/);
+        return new DataPropuesta(titulo, p.getImagen(), p.getEstadoActual(), p.getProponente(), p.getDescrip(), p.getLugar(), p.getMontoEntrada(), p.getMontoNecesaria(),p.getMontoAlcanzada() , p.getFechaPubli(), p.getPosibleRetorno(), p.getCategoria()/*"SIN FUNCIONAR"*/);
     }
     
     @Override
@@ -573,7 +539,7 @@ public class Controlador implements IControlador{
         DataPropuesta DP = null;
         for (Propuesta p : cp.getListaPropuestas()) {
             if (p.getTitulo_Nickname().equalsIgnoreCase(titulo_nick)) {
-                DP = new DataPropuesta(p.getTitulo(), p.getImagen(), p.getEstadoActual(), p.getProponente(), p.getDescripcion(), p.getLugar(), p.getEntrada(), p.getNecesaria(),p.getmontoAlcanzada(), p.getFechaARealizar(), p.getRetorno(), p.getCategoria());
+                DP = new DataPropuesta(p.getTitulo(), p.getImagen(), p.getEstadoActual(), p.getProponente(), p.getDescrip(), p.getLugar(), p.getMontoEntrada(), p.getMontoNecesaria(),p.getmontoAlcanzada(), p.getFechaPubli(), p.getPosibleRetorno(), p.getCategoria());
                 return DP;
             }
         }
@@ -756,7 +722,7 @@ public class Controlador implements IControlador{
         Colaborador c;
         String aporteColab;
         
-        for (Aporte a : prop.getAportes()) {
+        for (Aporte a : prop.getMisAportes()) {
             aporte$ = a.get$aporte();
             c = a.getColaborador();
             

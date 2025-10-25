@@ -105,7 +105,7 @@ public class Aporte implements Serializable {
     }
     public DataPropuesta getDataPropuesta(){
         if(miPropuesta!=null){
-            return new DataPropuesta(miPropuesta.getAlcanzada() ,miPropuesta.getTitulo(), miPropuesta.getEstadoActual(),miPropuesta.getLugar(),miPropuesta.getProponente());
+            return new DataPropuesta(miPropuesta.getMontoAlcanzada() ,miPropuesta.getTitulo(), miPropuesta.getEstadoActual(),miPropuesta.getLugar(),miPropuesta.getProponente());
         }
         return null;
     }
@@ -117,13 +117,41 @@ public class Aporte implements Serializable {
     public void setId(ObjectId id) {
         this.id = id;
     }
+
+    public void setMiColaborador(Colaborador miColaborador) {
+        this.miColaborador = miColaborador;
+    }
+
+    public void set$aporte(double $aporte) {
+        this.$aporte = $aporte;
+    }
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public void setRetorno(EnumRetorno retorno) {
+        this.retorno = retorno;
+    }
+
+    public Propuesta getMiPropuesta() {
+        return miPropuesta;
+    }
+
+    public Colaborador getMiColaborador() {
+        return miColaborador;
+    }
     
     public String getImagenMiPropuesta(){
         return this.miPropuesta.getImagen();
     }
     
     public double getNecesaria(){
-        return this.miPropuesta.getNecesaria();
+        return this.miPropuesta.getMontoNecesaria();
     }
 
     public String getComentario() {
