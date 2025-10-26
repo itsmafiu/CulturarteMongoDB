@@ -10,10 +10,12 @@ import Logica.Usuario;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bson.conversions.Bson;
 
 public class ControladorPersistencia {
     public ConexionMongoDB mongoDB;
@@ -56,6 +58,11 @@ public class ControladorPersistencia {
         return usuDB.find(eq("_id", nick)).first();
     }
     
+    public void seguirUsuario(Usuario seguidor, Usuario seguido){
+        Bson update = Updates.addToSet("misSeguidos", seguido.getNickname());
+        usuDB.updateOne(eq("_id", seguidor.getNickname()), update);
+    }
+    
     public Proponente buscarProponente(String nick) {
         return (Proponente) usuDB.find(eq("_id", nick)).first();
     }
@@ -95,13 +102,13 @@ public class ControladorPersistencia {
 
     public void añadirPropuesta(Propuesta p) {
         this.propuDB.insertOne(p);
-
-        Proponente prop = p.getProponente();
+        
+        Proponente prop = (Proponente) usuDB.find(eq("_id", p.getProponente())).first();
         if(!prop.getPropuestas().contains(p)){
-            prop.agregarPropuesta(p); //Sin esto no se guarda en PROPONENTE_Propuesta aunque claro
+            prop.agregarPropuesta(p.getTitulo()); //Sin esto no se guarda en PROPONENTE_Propuesta aunque claro
             editarUsuario(prop);  //no hay que olvidarte el .edit para que se persista
         }
-        Categoria cat = p.getCategoriaClase();
+        Categoria cat = findCategoria(p.getCategoriaClase());
         if (!cat.getPropuestas().contains(p)) { 
             cat.agregarPropuesta(p); //Lo mismo con esto pero aca se agrega la FK en Propuesta
             editarCategoria(cat);
@@ -109,7 +116,13 @@ public class ControladorPersistencia {
     }
 
     public List<Propuesta> getListaPropuestas() {
-        return propuDB.find().into(new ArrayList<>());
+        List<Propuesta> propuestas = new ArrayList<>();
+
+    for (Propuesta p : propuDB.find()) {
+        propuestas.add(p);
+    }
+
+    return propuestas;
     }
     
     public Propuesta getPropuesta(String titulo){
