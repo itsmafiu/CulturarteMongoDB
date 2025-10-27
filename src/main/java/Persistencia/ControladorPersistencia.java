@@ -179,11 +179,11 @@ public class ControladorPersistencia {
 //            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-
-    public void añadirAporte(Aporte a, Propuesta p, Colaborador c) {
+    public void editarColaborador(Colaborador col) {
+        usuDB.replaceOne(eq("_id", col.getNickname()), col);
+    }
+    public void añadirAporte(Aporte a/*, Propuesta p, Colaborador c*/) {
         aporteDB.insertOne(a);
-        editarPropuesta(p);
-        editarUsuario(c);
     }
     
     public void borrarAporte(Aporte a, Propuesta p, Colaborador c) throws Exception {

@@ -154,7 +154,9 @@ public class Propuesta implements Serializable {
         
     public void addAporte(Aporte a){
         misAportes.add(a);
-        a.setMiPropuesta(this);
+        a.setTituloMiPropuesta(titulo);
+        a.setTituloNickMiPropuesta(titulo+" by "+miProponente);
+        a.setImagenMiPropuesta(imagen);
         montoAlcanzada+=a.get$aporte();
     }
     
