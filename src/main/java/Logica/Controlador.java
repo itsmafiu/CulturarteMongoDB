@@ -417,7 +417,7 @@ public class Controlador implements IControlador{
         Propuesta p = cp.getPropuesta(titulo);
         
         p.modificarPropuesta(p.getDescrip(), p.getLugar(), p.getFechaPubli(), p.getMontoEntrada(), p.getMontoNecesaria(), p.getPosibleRetorno().toString(), estado, p.getImagen(), p.getCategoria());
-        //cp.modificarPropuesta(p);
+        cp.editarPropuesta(p);
         
         return 0;
     }
@@ -455,7 +455,7 @@ public class Controlador implements IControlador{
               seCambioCat = true;
         }
         p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c.getNombre());
-        //cp.modificarPropuesta(p);
+        cp.editarPropuesta(p);
         
         //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
         if(seCambioCat){
