@@ -157,12 +157,19 @@ public class Propuesta implements Serializable {
         a.setTituloMiPropuesta(titulo);
         a.setTituloNickMiPropuesta(titulo+" by "+miProponente);
         a.setImagenMiPropuesta(imagen);
-        montoAlcanzada+=a.get$aporte();
+        a.setNecesaria(montoNecesaria);
+        montoAlcanzada+=a.getAporte();
     }
     
-    public void desvincularAporte(Aporte a){
-        this.montoAlcanzada-=a.get$aporte();
-        this.misAportes.remove(a);
+    public void desvincularAporte(String nickCola){
+        for (Aporte a : misAportes) {
+            if (nickCola.equals(a.getNickMiColaborador())) {
+                //a.desvincular();
+                this.montoAlcanzada-=a.getAporte();
+                this.misAportes.remove(a);
+                return;
+            }
+        }
     }
     
     public String getImagen(){

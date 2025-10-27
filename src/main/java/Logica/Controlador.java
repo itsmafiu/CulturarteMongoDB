@@ -220,7 +220,7 @@ public class Controlador implements IControlador{
         cp.añadirAporte(a);
         miPropuesta.addAporte(a);
         miColaborador.añadirAporte(a);
-        
+        cp.editarAporte(a);
         cp.editarPropuesta(miPropuesta);
         cp.editarColaborador(miColaborador);
         return 0; //PROPUESTA AGREGADA CORRECTAMENTE  
@@ -252,7 +252,7 @@ public class Controlador implements IControlador{
         cp.añadirAporte(a);
         miPropuesta.addAporte(a);
         miColaborador.añadirAporte(a);
-        
+        cp.editarAporte(a);
         cp.editarPropuesta(miPropuesta);
         cp.editarColaborador(miColaborador);
         
@@ -608,9 +608,8 @@ public class Controlador implements IControlador{
                 Aporte a = cola.borrarAporte(tituloNick);
                 try {
                     Propuesta p = cp.getPropuesta(a.getTituloMiPropuesta());
-                    p.desvincularAporte(a);
+                    p.desvincularAporte(nick);
                     cp.borrarAporte(a,p,cola);
-                    
                 } catch (Exception ex) {
                     System.getLogger(Controlador.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
@@ -641,7 +640,7 @@ public class Controlador implements IControlador{
         String aporteColab;
         
         for (Aporte a : prop.getMisAportes()) {
-            aporte$ = a.get$aporte();
+            aporte$ = a.getAporte();
             c = a.getNickMiColaborador();
             
             aporteColab = c + "\t" + aporte$;

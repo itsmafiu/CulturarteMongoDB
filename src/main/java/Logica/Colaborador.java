@@ -86,7 +86,7 @@ public class Colaborador extends Usuario {
     public DataAporte getDataAporte(String tituloNick) {
         for (Aporte a : misAportes) {
             if (tituloNick.equals(a.getTituloNickMiPropuesta())) {
-                return new DataAporte(a.get$aporte(), a.getFechaHora(), a.getCantidad(), a.getRetorno(), a.getNickMiColaborador(), a.getTituloMiPropuesta(), a.getImagenMiPropuesta(), a.getNecesaria());
+                return new DataAporte(a.getAporte(), a.getFechaHora(), a.getCantidad(), a.getRetorno(), a.getNickMiColaborador(), a.getTituloMiPropuesta(), a.getImagenMiPropuesta(), a.getNecesaria());
             }
         }
         return null;

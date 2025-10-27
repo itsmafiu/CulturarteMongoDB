@@ -12,8 +12,8 @@ public class Aporte implements Serializable {
     private String tituloNickMiPropuesta;
     private String imagenMiPropuesta;
     private String nickMiColaborador;
-    private double $aporte;
-    private double $necesaria;
+    private double aporte;
+    private double necesaria;
     private LocalDateTime fechaHora;
     private int cantidad;
     private EnumRetorno retorno;
@@ -26,7 +26,7 @@ public class Aporte implements Serializable {
     public Aporte(String nickMiColaborador, double $aporte, int cantidad, EnumRetorno retorno) {
             
         this.nickMiColaborador = nickMiColaborador;
-        this.$aporte = $aporte;
+        this.aporte = $aporte;
         this.fechaHora = LocalDateTime.now();
         this.cantidad = cantidad;
         this.retorno = retorno;
@@ -35,7 +35,7 @@ public class Aporte implements Serializable {
     public Aporte(String nickMiColaborador, double $aporte, int cantidad, EnumRetorno retorno, LocalDateTime fecAp) {
             
         this.nickMiColaborador = nickMiColaborador;
-        this.$aporte = $aporte;
+        this.aporte = $aporte;
         this.fechaHora = fecAp;
         this.cantidad = cantidad;
         this.retorno = retorno;
@@ -86,12 +86,12 @@ public class Aporte implements Serializable {
         this.nickMiColaborador = nickMiColaborador;
     }
 
-    public double get$aporte() {
-        return $aporte;
+    public double getAporte() {
+        return aporte;
     }
 
-    public void set$aporte(double $aporte) {
-        this.$aporte = $aporte;
+    public void setAporte(double $aporte) {
+        this.aporte = $aporte;
     }
 
     public LocalDateTime getFechaHora() {
@@ -143,11 +143,11 @@ public class Aporte implements Serializable {
     }
 
     public double getNecesaria() {
-        return $necesaria;
+        return necesaria;
     }
 
     public void setNecesaria(double $necesaria) {
-        this.$necesaria = $necesaria;
+        this.necesaria = $necesaria;
     }
     
     

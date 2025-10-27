@@ -204,7 +204,7 @@ public class InterConsultaCola extends javax.swing.JInternalFrame {
     private void PropuestasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PropuestasActionPerformed
         if (this.Propuestas.getSelectedItem() != null && this.Colaboradores.getSelectedItem() != null && this.Propuestas.getSelectedIndex()!=0) {
             DataAporte DA = ic.getDataAporte(this.Propuestas.getSelectedItem().toString(),this.Colaboradores.getSelectedItem().toString());
-            this.txtAporte.setText(DA.get$aporte().toString());
+            this.txtAporte.setText(DA.getAporte().toString());
             this.txtCantidad.setText(DA.getCantidad()+"");
             this.txtFecha.setText(DA.getFechaHora().format(DateTimeFormatter.ISO_DATE));
             this.txtRetorno.setText(DA.getRetorno().toString());
@@ -215,10 +215,10 @@ public class InterConsultaCola extends javax.swing.JInternalFrame {
             this.jProgressBar1.setMinimum(0);
             this.jProgressBar1.setMaximum(DA.getNecesaria().intValue());
             
-            if(DA.get$aporte().intValue() >= DA.getNecesaria().intValue()){
+            if(DA.getAporte().intValue() >= DA.getNecesaria().intValue()){
                 this.jProgressBar1.setValue(DA.getNecesaria().intValue());
             }else{
-                this.jProgressBar1.setValue(DA.get$aporte().intValue());
+                this.jProgressBar1.setValue(DA.getAporte().intValue());
             } 
             
         }else{

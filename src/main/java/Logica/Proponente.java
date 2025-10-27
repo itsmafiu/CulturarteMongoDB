@@ -58,5 +58,11 @@ public class Proponente extends Usuario {
     }
     public List<String> getPropuestas(){
         return this.misPropuestas;
-    }   
+    }
+
+    public void setPropuestas(List<String> misPropuestas) {
+        this.misPropuestas = misPropuestas;
+    }
+    
+    
 }
