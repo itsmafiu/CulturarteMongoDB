@@ -108,8 +108,8 @@ public class ControladorPersistencia {
             prop.agregarPropuesta(p.getTitulo()); //Sin esto no se guarda en PROPONENTE_Propuesta aunque claro
             editarUsuario(prop);  //no hay que olvidarte el .edit para que se persista
         }
-        Categoria cat = findCategoria(p.getCategoriaClase());
-        if (!cat.getPropuestas().contains(p)) { 
+        Categoria cat = findCategoria(p.getCategoria());
+        if (!cat.getMisPropuestas().contains(p)) { 
             cat.agregarPropuesta(p); //Lo mismo con esto pero aca se agrega la FK en Propuesta
             editarCategoria(cat);
         }
@@ -117,12 +117,12 @@ public class ControladorPersistencia {
 
     public List<Propuesta> getListaPropuestas() {
         List<Propuesta> propuestas = new ArrayList<>();
-
-    for (Propuesta p : propuDB.find()) {
-        propuestas.add(p);
-    }
-
-    return propuestas;
+//
+//        for (Propuesta p : propuDB.find()) {
+//            propuestas.add(p);
+//        }
+//        return propuestas;
+        return propuDB.find().into(propuestas);
     }
     
     public Propuesta getPropuesta(String titulo){
@@ -179,11 +179,11 @@ public class ControladorPersistencia {
 //            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-
-    public void añadirAporte(Aporte a, Propuesta p, Colaborador c) {
+    public void editarColaborador(Colaborador col) {
+        usuDB.replaceOne(eq("_id", col.getNickname()), col);
+    }
+    public void añadirAporte(Aporte a/*, Propuesta p, Colaborador c*/) {
         aporteDB.insertOne(a);
-        editarPropuesta(p);
-        editarUsuario(c);
     }
     
     public void borrarAporte(Aporte a, Propuesta p, Colaborador c) throws Exception {

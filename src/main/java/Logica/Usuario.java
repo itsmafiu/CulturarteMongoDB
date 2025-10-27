@@ -12,7 +12,7 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 //@Table(name="Usuario")
 //@Inheritance(strategy = InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
-@BsonDiscriminator(key = "tipo", value = "usuario") // puede tener herencias
+@BsonDiscriminator(key = "tipo", value = "Usuario") // puede tener herencias
 public class Usuario implements Serializable {
 //    @Id
     @BsonId
@@ -84,10 +84,6 @@ public class Usuario implements Serializable {
     public LocalDate getFecNac() {
         return fecNac;
     }
-    
-    public String getFecNacString(){
-        return fecNac.toString();
-    }
 
     public void setFecNac(LocalDate fecNac) {
         this.fecNac = fecNac;
@@ -153,21 +149,7 @@ public class Usuario implements Serializable {
             return 1;
         }
         return 0; //error 0: no se encuentra
-    }
-    
-    public List<String> getSeguidos(){
-//        List<String> listaSeguidos = new ArrayList<>();
-//        for(Usuario u : this.misSeguidos){
-//            listaSeguidos.add(u.getNickname());
-//        }
-//        return listaSeguidos;
-        System.out.println("lista seguidos en usuario:");
-        for(String s : this.misSeguidos){
-            System.out.println(s);
-        }
-        System.out.println("fin lista");
-        return this.misSeguidos;
-    }
+    } 
     
         public List<Propuesta> getMisFavoritas() {
         return misFavoritas;

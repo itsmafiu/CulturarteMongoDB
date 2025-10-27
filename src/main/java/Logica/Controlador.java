@@ -193,37 +193,9 @@ public class Controlador implements IControlador{
         }
         return null;
     }
+    
     @Override
     public int altaAporte(String strmiColaborador, String strmiPropuesta,  double $aporte, int cantidad, EnumRetorno retorno){
-        //CON MEMORIA LOCAL
-//        Propuesta miPropuesta = null;
-//        Colaborador miColaborador = null;                
-//        for (Colaborador c : misColaboradores){
-//            if(c.getNickname().equals(strmiColaborador)){
-//                miColaborador = c;
-//                break;
-//            }
-//        }        
-//        for (Propuesta p : misPropuestas) {
-//            if (p.getTitulo_Nickname().equals(strmiPropuesta)) {
-//                miPropuesta = p;
-//                break;        
-//            }
-//        }                
-//        if($aporte > miPropuesta.getmontoNecesaria() || $aporte > miPropuesta.getmontoNecesaria()-miPropuesta.getmontoAlcanzada()){
-//            return -2;//ERROR: Aporte superior a lo permitido
-//        }        
-//        if (miColaborador.createAporte(miPropuesta.getTitulo(), $aporte, cantidad, retorno) == null) {
-//            return -3;  //Error: El usuario ya colabora con la Propuesta
-//        }         
-//        if (miPropuesta.getPosibleRetorno()!=EnumRetorno.AMBOS && miPropuesta.getPosibleRetorno()!=retorno){
-//            return -4; //Error: Retorno no valido en esta Propuesta
-//        }        
-//        Aporte a = miColaborador.createAporte(miPropuesta.getTitulo(), $aporte, cantidad, retorno);
-//        miPropuesta.addAporte(a);
-//        return 0; //PROPUESTA AGREGADA CORRECTAMENTE  
-        
-        //CON PERSISTENCIA
         Propuesta miPropuesta = null;
         Colaborador miColaborador = null;                
         for (Usuario c : cp.getListaColaboradores()){
@@ -237,10 +209,7 @@ public class Controlador implements IControlador{
                 miPropuesta = p;
                 break;        
             }
-        }                
-        //if($aporte > miPropuesta.getmontoNecesaria() || $aporte > miPropuesta.getmontoNecesaria()-miPropuesta.getmontoAlcanzada()){
-        //    return -2;//ERROR: Aporte superior a lo permitido - ESTO HAY QUE SACARLO el monto puede ser infinito, esto no es error
-        //}        
+        }                     
         if (miColaborador.createAporte(miPropuesta.getTitulo(), $aporte, cantidad, retorno) == null) {
             return -3;  //Error: El usuario ya colabora con la Propuesta
         }         
@@ -248,9 +217,12 @@ public class Controlador implements IControlador{
             return -4; //Error: Retorno no valido en esta Propuesta
         }        
         Aporte a = miColaborador.createAporte(miPropuesta.getTitulo(), $aporte, cantidad, retorno);
+        cp.añadirAporte(a);
         miPropuesta.addAporte(a);
         miColaborador.añadirAporte(a);
-        cp.añadirAporte(a, miPropuesta, miColaborador);
+        
+        cp.editarPropuesta(miPropuesta);
+        cp.editarColaborador(miColaborador);
         return 0; //PROPUESTA AGREGADA CORRECTAMENTE  
     }
     
@@ -269,10 +241,7 @@ public class Controlador implements IControlador{
                 miPropuesta = p;
                 break;        
             }
-        }                
-        if($aporte > miPropuesta.getmontoNecesaria() || $aporte > miPropuesta.getmontoNecesaria()-miPropuesta.getmontoAlcanzada()){
-            return -2;//ERROR: Aporte superior a lo permitido
-        }        
+        }                      
         if (miColaborador.createAporte(miPropuesta.getTitulo(), $aporte, cantidad, retorno) == null) {
             return -3;  //Error: El usuario ya colabora con la Propuesta
         }         
@@ -280,11 +249,12 @@ public class Controlador implements IControlador{
             return -4; //Error: Retorno no valido en esta Propuesta
         }        
         Aporte a = miColaborador.createAporte(miPropuesta.getTitulo(), $aporte, cantidad, retorno,fecAp);
+        cp.añadirAporte(a);
         miPropuesta.addAporte(a);
         miColaborador.añadirAporte(a);
-        cp.añadirAporte(a, miPropuesta, miColaborador);
+        
         cp.editarPropuesta(miPropuesta);
-        cp.editarUsuario(miColaborador);
+        cp.editarColaborador(miColaborador);
         
         return 0; //PROPUESTA AGREGADA CORRECTAMENTE  
     }
@@ -359,7 +329,7 @@ public class Controlador implements IControlador{
     @Override
     public List<String> getSeguidos(String seguidor) {
         Usuario usu = cp.buscarUsuario(seguidor);
-        return usu.getSeguidos();
+        return usu.getMisSeguidos();
     }
 
     @Override
@@ -372,7 +342,7 @@ public class Controlador implements IControlador{
         if (resultado == 0) {
             return 0; //error 0: ya sigue al usuario nick2
         }
-        cp.seguirUsuario(seguidor, seguir);
+        cp.editarUsuario(seguidor);
         return 1;
     }
     
@@ -395,43 +365,7 @@ public class Controlador implements IControlador{
     
     @Override
     public int altaPropuesta(String nick, String tipo, String titulo, String descripcion, String lugar, LocalDate fechaPrev, String montoXentrada, String montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual, String imagen){
-        
-//        Proponente prop = null;
-//        
-//        boolean encontrado = false;
-//        for (Proponente p : misProponentes) {
-//            if (p.getNickname().equalsIgnoreCase(nick)) {
-//                encontrado = true;
-//                prop = p;
-//                break;
-//            }
-//        }
-//        
-//        Categoria c = cp.findCategoria(tipo); ESTO NO TENDRIA PORQUE ESTAR ACA xd
-//        //Ya se busca directamente en la BD el arbol categoria no tendra los
-//        //datos
-//        if (c == null) {
-//            // NO SE ENCONTRO LA CATEGORIA o PUSO "CATEGORIA"
-//            return 0;
-//        }
-//        
-//        if(tipo.equals("Categoria")){
-//            return -1;
-//        }
-//        
-//        
-//        if (encontrado) {
-//            
-//            Propuesta nuevaProp = new Propuesta(c, prop, titulo, descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, fechaActual, imagen);
-//            misPropuestas.add(nuevaProp);
-//            //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
-//            return 1;
-//        } else {
-//            return 0;
-//        }
-        
-        //PERSISTENCIA
-        
+     
         if (existeTitulo(titulo)) {
             return -1;
         }
@@ -452,31 +386,15 @@ public class Controlador implements IControlador{
     public int cambiarEstadoPropuesta(String titulo, String estado){
         Propuesta p = cp.getPropuesta(titulo);
         
-        p.modificarPropuesta(p.getDescripcion(), p.getLugar(), p.getFechaARealizar(), p.getEntrada(), p.getNecesaria(), p.getPosibleRetorno().toString(), estado, p.getImagen(), p.getCategoriaClase());
-        //cp.modificarPropuesta(p);
+        p.modificarPropuesta(p.getDescrip(), p.getLugar(), p.getFechaPubli(), p.getMontoEntrada(), p.getMontoNecesaria(), p.getPosibleRetorno().toString(), estado, p.getImagen(), p.getCategoria());
+        cp.editarPropuesta(p);
         
         return 0;
     }
     
     @Override
     public int modificarPropuesta(String titulo, String descripcion, String lugar, LocalDate fechaPrev, String montoXentrada, String montoNecesario, String posibleRetorno, String estado, String imagen, String categoria){
-        
-//        for(Propuesta p : this.misPropuestas){
-//            if(p.getTitulo().equals(titulo)){
-//                Categoria c = cp.findCategoria(categoria);
-//                //Ya se busca directamente en la BD el arbol categoria no tendra los
-//                 //datos
-//                
-//                //Quitar esta propuesta de la categoria que la apuntaba (por el caso de cambio de categoria) hacerlo directo con persistencia
-//                p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada),Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c);
-//                //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
-//                return 0;
-//            }
-//        }
-//        return 1; //error 1: no deberia llegar acá
-
-///////////////persistencia/////////////////
-        
+    
         Propuesta p = cp.getPropuesta(titulo);
         Categoria c = cp.findCategoria(categoria);
         //Ya se busca directamente en la BD el arbol categoria no tendra los
@@ -485,13 +403,13 @@ public class Controlador implements IControlador{
         //Quitar esta propuesta de la categoria que la apuntaba (por el caso de cambio de categoria) hacerlo directo con persistencia
         if(!p.getCategoria().equals(c.getNombre())){ //p.getCategoria no anda
 //            //Quitar esta propuesta de la categoria que la apuntaba
-              Categoria viejaCat = cp.findCategoria(p.getCategoriaClase()); //Aca saco la categoria que tenia antes ya que aun no se modifico
+              Categoria viejaCat = cp.findCategoria(p.getCategoria()); //Aca saco la categoria que tenia antes ya que aun no se modifico
               viejaCat.sacarPropuesta(p); //La saco de su lista de propuestas
               cp.editarCategoria(viejaCat); //mando el edit para reflejar cambios en BD
               seCambioCat = true;
         }
         p.modificarPropuesta(descripcion, lugar, fechaPrev, Double.parseDouble(montoXentrada), Double.parseDouble(montoNecesario), posibleRetorno, estado, imagen, c.getNombre());
-        //cp.modificarPropuesta(p);
+        cp.editarPropuesta(p);
         
         //Agregar propuesta a esa categoria directamente lo hare con persistencia antes seria c.agregarPropuesta(nuevaProp);
         if(seCambioCat){
@@ -519,8 +437,10 @@ public class Controlador implements IControlador{
           String aux;
           for (Propuesta p : cp.getListaPropuestas()) {
               aux = p.getTitulo();
+              System.out.println("titulo: " + aux);
               listaPropuestas.add(aux); 
-            }
+          }
+          System.out.println("Lista Propuestas:" + listaPropuestas);
           return listaPropuestas;
     }
     
@@ -554,7 +474,7 @@ public class Controlador implements IControlador{
 
         //persistencia
         Propuesta p = cp.getPropuesta(titulo);
-        return new DataPropuesta(titulo, p.getImagen(), p.getEstadoActual(), p.getProponente(), p.getDescripcion(), p.getLugar(), p.getEntrada(), p.getNecesaria(),p.getAlcanzada() , p.getFechaARealizar(), p.getRetorno(), p.getCategoria()/*"SIN FUNCIONAR"*/);
+        return new DataPropuesta(titulo, p.getImagen(), p.getEstadoActual(), p.getProponente(), p.getDescrip(), p.getLugar(), p.getMontoEntrada(), p.getMontoNecesaria(),p.getMontoAlcanzada() , p.getFechaPubli(), p.getPosibleRetorno(), p.getCategoria()/*"SIN FUNCIONAR"*/);
     }
     
     @Override
@@ -573,7 +493,7 @@ public class Controlador implements IControlador{
         DataPropuesta DP = null;
         for (Propuesta p : cp.getListaPropuestas()) {
             if (p.getTitulo_Nickname().equalsIgnoreCase(titulo_nick)) {
-                DP = new DataPropuesta(p.getTitulo(), p.getImagen(), p.getEstadoActual(), p.getProponente(), p.getDescripcion(), p.getLugar(), p.getEntrada(), p.getNecesaria(),p.getmontoAlcanzada(), p.getFechaARealizar(), p.getRetorno(), p.getCategoria());
+                DP = new DataPropuesta(p.getTitulo(), p.getImagen(), p.getEstadoActual(), p.getProponente(), p.getDescrip(), p.getLugar(), p.getMontoEntrada(), p.getMontoNecesaria(),p.getmontoAlcanzada(), p.getFechaPubli(), p.getPosibleRetorno(), p.getCategoria());
                 return DP;
             }
         }
@@ -602,7 +522,15 @@ public class Controlador implements IControlador{
         
         DataColaborador DCola = null;
         Colaborador c = (Colaborador) cp.buscarUsuario(NickName);
-        DCola = new DataColaborador(NickName, c.getNombre(),c.getApellido(),c.getEmail(),c.getFecNac(),c.getImagen(),c.getPropuestas());
+        List<String> titulos = c.getTituloPropuestas();
+        List<DataPropuesta> DP = new ArrayList<>();
+        for(String t : titulos){
+           Propuesta p = (Propuesta) cp.getPropuesta(t);
+           DataPropuesta dp = new DataPropuesta(p.getMontoAlcanzada(), p.getTitulo(), p.getEstadoActual(), p.getLugar(), p.getProponente());
+           DP.add(dp);
+        }
+        
+        DCola = new DataColaborador(NickName, c.getNombre(),c.getApellido(),c.getEmail(),c.getFecNac(),c.getImagen(),DP);
         return DCola;
         
     }
@@ -655,7 +583,7 @@ public class Controlador implements IControlador{
         for(Usuario c : cp.getListaColaboradores()){
             if(colab.equals(c.getNickname())){
                 Colaborador cola = (Colaborador) c;
-                return  cola.getTituloPropuestas();
+                return  cola.getTituloNickPropuestas();
             }
         }   
         return null;
@@ -663,15 +591,6 @@ public class Controlador implements IControlador{
     
     @Override
     public DataAporte getDataAporte(String tituloNick, String nick){
-        //CON MEMEORIA LOCAL
-//        for(Colaborador c : misColaboradores){
-//            if(nick.equals(c.getNickname())){
-//                return c.getDataAporte(tituloNick);
-//            }
-//        }
-//        return null;
-        
-        //CON PERSISTENCIA
         for(Usuario c : cp.getListaColaboradores()){
             if(nick.equals(c.getNickname())){
                 Colaborador cola = (Colaborador) c;
@@ -683,21 +602,14 @@ public class Controlador implements IControlador{
     
     @Override
     public void borrarAporte(String tituloNick, String nick){
-        //CON MEMEORIA LOCAL
-//        for(Colaborador c : misColaboradores){
-//            if(nick.equals(c.getNickname())){
-//                c.borrarAporte(tituloNick);
-//                break;
-//            }
-//        }
-        
-        //CON PERSISTENCIA
         for(Usuario c : cp.getListaColaboradores()){
             if(nick.equals(c.getNickname())){
                 Colaborador cola = (Colaborador) c;
                 Aporte a = cola.borrarAporte(tituloNick);
                 try {
-                    cp.borrarAporte(a,a.getPropuesta(),cola);
+                    Propuesta p = cp.getPropuesta(a.getTituloMiPropuesta());
+                    p.desvincularAporte(a);
+                    cp.borrarAporte(a,p,cola);
                     
                 } catch (Exception ex) {
                     System.getLogger(Controlador.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
@@ -722,45 +634,17 @@ public class Controlador implements IControlador{
     
     @Override
     public List<String> getColabsProp(String titulo){
-//        List<String> listaColabProp = new ArrayList<>();
-//        Propuesta prop = null;
-//        double aporte$;
-//        Colaborador c = null;
-//        String aporteColab;
-//        
-//        for (Propuesta p : misPropuestas) {
-//            if (p.getTitulo().equalsIgnoreCase(titulo)) {
-//                prop = p;
-//            }
-//        } // pa encontrar la propuesta
-//        
-//        if (prop == null) {
-//            return listaColabProp;
-//        }
-//        
-//        for (Aporte a : prop.getAportes()) {
-//            aporte$ = a.get$aporte();
-//            c = a.getColaborador();
-//            
-//            aporteColab = c.getNickname() + "\t" + aporte$;
-//            listaColabProp.add(aporteColab);
-//        }
-//        
-//        return listaColabProp;
-        
-        //PERSISTENCIA
-        
         List<String> listaColabProp = new ArrayList<>();
         Propuesta prop = cp.getPropuesta(titulo);
         double aporte$;
-        Colaborador c;
+        String c;
         String aporteColab;
         
-        for (Aporte a : prop.getAportes()) {
+        for (Aporte a : prop.getMisAportes()) {
             aporte$ = a.get$aporte();
-            c = a.getColaborador();
+            c = a.getNickMiColaborador();
             
-            aporteColab = c.getNickname() + "\t" + aporte$;
+            aporteColab = c + "\t" + aporte$;
             listaColabProp.add(aporteColab);
         }
         
@@ -845,189 +729,4 @@ public class Controlador implements IControlador{
         return new DataComentario(a.getComentario(),a.getFecComentario(),nick,titulo);               
     }   
 
-//    @Override
-//    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String direccion, String bio, String sitioWeb, String imagenWeb) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-
-//    @Override
-//    public int añadirUsuario(String nick, String nombre, String apellido, String correo, LocalDate fecNac, String imagen, String contraseña, String imagenWeb) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-
-//    @Override
-//    public int altaCategoria(String nombreCat) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int altaCategoria(String nombreCat, String nombrePadreCat) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int altaAporte(String miColaborador, String miPropuesta, double $aporte, int cantidad, EnumRetorno retorno) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int altaAporte(String miColaborador, String miPropuesta, double $aporte, int cantidad, EnumRetorno retorno, LocalDateTime fecAp) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getUsuarios() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getUsuariosProponentes() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public DataProponente consultaDeProponente(String NickName) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public DataColaborador consultaDeColaborador(String NickName) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getSeguidos(String seguidor) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getColaboradores() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getPropuestas_Proponentes() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int seguirUsuario(String nick1, String nick2) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int dejarSeguirUsuario(String nick1, String nick2) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int altaPropuesta(String nick, String tipo, String titulo, String descripcion, String lugar, LocalDate fechaPrev, String montoXentrada, String montoNecesario, EnumRetorno posibleRetorno, LocalDate fechaActual, String imagen) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int cambiarEstadoPropuesta(String titulo, String est) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int modificarPropuesta(String titulo, String descripcion, String lugar, LocalDate fechaPrev, String montoXentrada, String montoNecesario, String posibleRetorno, String estado, String imagen, String categoria) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public DefaultMutableTreeNode cargarNodoRaizCategorias() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getPropuestas() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getPropuestasI() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public DataPropuesta consultaDePropuesta(String titulo) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public DataPropuesta getDataPropuesta(String titulo_nick) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getEstados() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getPropXEstado(String estado) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getPropuestasXColaborador(String nick) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public DataAporte getDataAporte(String tituloNick, String nick) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public void borrarAporte(String tituloNick, String nick) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public boolean existeTitulo(String titulo) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public List<String> getColabsProp(String titulo) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public boolean seleccionaCategoria(String categoria) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public void cambiarEstado(String titulo, int n) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public void eliminarUsuario(String usu) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public boolean esFavorita(String titulo, String nick) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public int cambiarFavorita(String titulo, String nick) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public void addComentario(String titulo, String nick, String comentario) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//
-//    @Override
-//    public DataComentario getDataComentario(String titulo, String nick) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
-//    
 }

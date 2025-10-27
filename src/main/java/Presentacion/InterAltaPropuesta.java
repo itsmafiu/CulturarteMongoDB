@@ -355,7 +355,7 @@ public class InterAltaPropuesta extends javax.swing.JInternalFrame {
             return;
         }
         
-        if (nick.equals("--Seleccionar--") || txtTitulo.getText().isEmpty() || txtDescripcion.getText().isEmpty() || txtEntrada.getText().isEmpty() || txtLugar.getText().isEmpty() || txtMonto.getText().isEmpty()) {
+        if (nick.equals("--Seleccionar--") || txtTitulo.getText().isEmpty() || txtDescripcion.getText().isEmpty() || txtEntrada.getText().isEmpty() || txtLugar.getText().isEmpty() || txtMonto.getText().isEmpty() || tipo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Faltan campos por llenar!", "Error", HEIGHT);
         }else{
             
@@ -387,10 +387,11 @@ public class InterAltaPropuesta extends javax.swing.JInternalFrame {
                 this.txtImagen = "";
             }
            
-            if(ic.altaPropuesta(nick, tipo, titulo, descripcion, lugar, fechaPrev, entrada, monto, retorno, fechaActual, this.txtImagen) == 1){
+            int resultado = ic.altaPropuesta(nick, tipo, titulo, descripcion, lugar, fechaPrev, entrada, monto, retorno, fechaActual, this.txtImagen);
+            if(resultado == 1){
                 JOptionPane.showMessageDialog(this, "La propuesta ha sido ingresada!", "Listo!", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
-            }else if(ic.altaPropuesta(nick, tipo, titulo, descripcion, lugar, fechaPrev, entrada, monto, retorno, fechaActual, this.txtImagen) == 0){
+            }else if(resultado == 0){
                 //ERROR CON LA CATEGORIA!
                 JOptionPane.showMessageDialog(this, "NO SE ENCONTRO LA CATEGORIA", "Error", HEIGHT);
             }else{

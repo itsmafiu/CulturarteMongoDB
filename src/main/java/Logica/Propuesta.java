@@ -17,6 +17,7 @@ import org.bson.codecs.pojo.annotations.BsonRepresentation;
 public class Propuesta implements Serializable {
 //    @Id
     @BsonId
+    @BsonProperty("_id")
     private String titulo;
 //    @Column(name="descripcion",length=1000)
     private String descrip;
@@ -153,17 +154,15 @@ public class Propuesta implements Serializable {
         
     public void addAporte(Aporte a){
         misAportes.add(a);
-        a.setMiPropuesta(this);
+        a.setTituloMiPropuesta(titulo);
+        a.setTituloNickMiPropuesta(titulo+" by "+miProponente);
+        a.setImagenMiPropuesta(imagen);
         montoAlcanzada+=a.get$aporte();
     }
     
     public void desvincularAporte(Aporte a){
         this.montoAlcanzada-=a.get$aporte();
         this.misAportes.remove(a);
-    }
-    
-    public List<Aporte> getAportes(){
-        return this.misAportes; 
     }
     
     public String getImagen(){
@@ -178,28 +177,8 @@ public class Propuesta implements Serializable {
         return this.miProponente;
     }
     
-    public String getDescripcion(){
-        return this.descrip;
-    }
-    
     public String getLugar(){
         return this.lugar;
-    }
-    
-    public Double getEntrada(){
-        return this.montoEntrada;
-    }
-    
-    public Double getNecesaria(){
-        return this.montoNecesaria;
-    }
-    
-    public EnumRetorno getRetorno(){
-        return this.posibleRetorno;
-    }
-    
-    public LocalDate getFechaARealizar(){
-        return this.fechaPubli;
     }
 
     public LocalDate getFecha() {
@@ -212,12 +191,6 @@ public class Propuesta implements Serializable {
     
     public String getCategoria(){
         return this.categoria;
-    }
-    public String getCategoriaClase(){
-        return this.categoria;
-    }
-    public Double getAlcanzada(){
-        return this.montoAlcanzada;
     }
     
     public void setEstadoActual(Estado estadoActual) {
@@ -237,7 +210,92 @@ public class Propuesta implements Serializable {
         this.estadoActual = e;
         this.misEstados.add(e);
     }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setDescrip(String descrip) {
+        this.descrip = descrip;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
+
+    public void setMontoEntrada(double montoEntrada) {
+        this.montoEntrada = montoEntrada;
+    }
+
+    public void setMontoNecesaria(double montoNecesaria) {
+        this.montoNecesaria = montoNecesaria;
+    }
+
+    public void setMontoAlcanzada(double montoAlcanzada) {
+        this.montoAlcanzada = montoAlcanzada;
+    }
+
+    public void setFechaPubli(LocalDate fechaPubli) {
+        this.fechaPubli = fechaPubli;
+    }
+
+    public void setPosibleRetorno(EnumRetorno posibleRetorno) {
+        this.posibleRetorno = posibleRetorno;
+    }
+
+    public void setMisAportes(List<Aporte> misAportes) {
+        this.misAportes = misAportes;
+    }
+
+    public void setMisEstados(List<Estado> misEstados) {
+        this.misEstados = misEstados;
+    }
+
+    public void setMiProponente(String miProponente) {
+        this.miProponente = miProponente;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getDescrip() {
+        return descrip;
+    }
+
+    public double getMontoEntrada() {
+        return montoEntrada;
+    }
+
+    public double getMontoNecesaria() {
+        return montoNecesaria;
+    }
+
+    public double getMontoAlcanzada() {
+        return montoAlcanzada;
+    }
+
+    public LocalDate getFechaPubli() {
+        return fechaPubli;
+    }
+
+    public List<Aporte> getMisAportes() {
+        return misAportes;
+    }
+
+    public List<Estado> getMisEstados() {
+        return misEstados;
+    }
+
+    public String getMiProponente() {
+        return miProponente;
+    }
   
+    
 }
 
 

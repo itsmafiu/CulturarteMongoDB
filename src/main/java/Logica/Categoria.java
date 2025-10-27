@@ -57,9 +57,6 @@ public class Categoria implements Serializable{
     public void setPadre(String padre) {
         this.padre = padre;
     }
-    public List<Propuesta> getPropuestas(){
-        return misPropuestas;
-    }
     
     public void agregarPropuesta(Propuesta prop){ //Esto hara que tenga una complejidad adicional para el alta de propuesta y modificar propuestas y más para propuestas
         //canceladas que supongo no debo mostrar...
@@ -75,4 +72,13 @@ public class Categoria implements Serializable{
         hijas.add(cat);
         cat.setPadre(this.getNombre());
     }
+
+    public List<Propuesta> getMisPropuestas() {
+        return misPropuestas;
+    }
+
+    public void setMisPropuestas(List<Propuesta> misPropuestas) {
+        this.misPropuestas = misPropuestas;
+    }
+    
 }

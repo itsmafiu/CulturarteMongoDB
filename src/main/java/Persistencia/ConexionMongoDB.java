@@ -140,12 +140,12 @@ public MongoDatabase getDatabaseWithCodec(String databaseName) throws Exception 
         }
     }
 
-    CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+    CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).register("Logica").build();
 
     CodecRegistry pojoCodecRegistry = CodecRegistries.fromRegistries(
+        CodecRegistries.fromCodecs(new LocalDateCodec(), new LocalDateTimeCodec()),
         MongoClientSettings.getDefaultCodecRegistry(),
-        CodecRegistries.fromProviders(pojoCodecProvider),
-        CodecRegistries.fromCodecs(new LocalDateCodec(), new LocalDateTimeCodec())
+        CodecRegistries.fromProviders(pojoCodecProvider)
     );
 
     MongoDatabase database = this.client.getDatabase(databaseName).withCodecRegistry(pojoCodecRegistry);
