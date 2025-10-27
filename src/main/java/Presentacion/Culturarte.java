@@ -12,7 +12,7 @@ public class Culturarte {
     
     public static void main(String[] args) throws Exception {
         
-        ConexionMongoDB mongoDB = new ConexionMongoDB("localhost", 27017, "root", "1234");
+        ConexionMongoDB mongoDB = new ConexionMongoDB("localhost", 27017, "admin", "1234");
         try{
             mongoDB.crearConexion();
         }catch(MongoException e){

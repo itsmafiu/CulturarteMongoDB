@@ -219,7 +219,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Contribuci&#xf3;n:"/>
+        <Property name="text" type="java.lang.String" value="Contribuci&#xf3;n personal respecto a monto necesario:"/>
       </Properties>
     </Component>
   </SubComponents>
